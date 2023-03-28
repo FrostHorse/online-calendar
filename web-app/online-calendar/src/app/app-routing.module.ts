@@ -19,7 +19,7 @@ const routes: Routes = [
     loadChildren: () =>
       import('../app/pages/sign-up/sign-up.module').then((m) => m.SignUpModule),
   },
-  { path: '', redirectTo: '/calendar', pathMatch: 'full' },
+  { path: '', redirectTo: '/sign-in', pathMatch: 'full' },
 ];
 
 @NgModule({

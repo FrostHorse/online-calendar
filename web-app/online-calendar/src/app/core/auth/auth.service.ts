@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable, Subject, take, tap } from 'rxjs';
 import { User } from 'src/app/core/models/user';
 
@@ -7,7 +8,10 @@ import { User } from 'src/app/core/models/user';
 export class AuthService {
   private readonly userSubject$ = new Subject<User>();
   public readonly user$ = this.userSubject$.asObservable();
-  constructor(private readonly http: HttpClient) {
+  constructor(
+    private readonly http: HttpClient,
+    private readonly router: Router
+  ) {
     this.fetchAllUser().pipe(take(1)).subscribe();
   }
 
@@ -27,8 +31,11 @@ export class AuthService {
     const url = 'http://localhost:3000/users/login';
     return this.http.post<any>(url, { email, password }).pipe(
       tap((user) => {
-        console.log('userLoggedIn', user);
-        this.userSubject$.next(user);
+        if (user) {
+          console.log('userLoggedIn', user);
+          this.userSubject$.next(user);
+          this.router.navigate(['calendar']);
+        }
       })
     );
   }
