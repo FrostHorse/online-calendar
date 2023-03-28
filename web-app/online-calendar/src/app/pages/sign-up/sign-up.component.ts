@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { take } from 'rxjs';
 import { User } from 'src/app/core/models/user';
-import { SignUpService } from './services/sign-up.service';
+import { AuthService } from '../../core/auth/auth.service';
 
 @Component({
   selector: 'app-signup',
@@ -17,7 +17,7 @@ export class SignUpComponent {
     password: new FormControl('', [Validators.required]),
   });
 
-  constructor(private readonly signUpService: SignUpService) {}
+  constructor(private readonly authService: AuthService) {}
 
   public signUp(): void {
     if (
@@ -33,7 +33,7 @@ export class SignUpComponent {
         password: this.signUpForm.value.password,
         phoneNumber: this.signUpForm.value.phoneNumber,
       };
-      this.signUpService.createUser(user).pipe(take(1)).subscribe();
+      this.authService.signUp(user).pipe(take(1)).subscribe();
     }
   }
 }

@@ -1,0 +1,10 @@
+<div class="sign-in-form-container">
+  <form [formGroup]="signInForm" (ngSubmit)="signIn()">
+    <legend>Sign-In</legend>
+    <label>Enter your email</label><br />
+    <input type="email" name="email" formControlName="email" /><br />
+    <label>Enter your password</label><br />
+    <input type="password" name="password" formControlName="password" /><br />
+    <input type="submit" value="log-in" />
+  </form>
+</div>

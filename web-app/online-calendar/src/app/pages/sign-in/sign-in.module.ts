@@ -1,10 +1,11 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SignInComponent } from './sign-in.component';
+import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { SignInRoutingModule } from './sign-in-routing.module';
+import { SignInComponent } from './sign-in.component';
 
 @NgModule({
-  imports: [CommonModule, SignInRoutingModule],
+  imports: [CommonModule, SignInRoutingModule, ReactiveFormsModule],
   declarations: [SignInComponent],
   exports: [SignInComponent],
 })
