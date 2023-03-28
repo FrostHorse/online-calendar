@@ -22,9 +22,12 @@ export class AuthService {
 
   public signUp(user: User): Observable<User> {
     const url = 'http://localhost:3000/users';
-    return this.http
-      .post<any>(url, user)
-      .pipe(tap(() => console.log('userCreated')));
+    return this.http.post<any>(url, user).pipe(
+      tap(() => {
+        console.log('userCreated');
+        this.router.navigate(['sign-in']);
+      })
+    );
   }
 
   public signIn(email: string, password: string): Observable<User> {
