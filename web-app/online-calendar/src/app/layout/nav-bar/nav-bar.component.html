@@ -1,3 +1,10 @@
-<ul>
-  <li><a [routerLink]="'/calendar'" routerLinkActive="active">Calendar</a></li>
-</ul>
+<ng-container *ngIf="user$ | async as user">
+  <ul>
+    <li>
+      <a [routerLink]="'/calendar'" routerLinkActive="active">Calendar</a>
+    </li>
+    <li class="right">
+      <a>{{ user.name }}</a>
+    </li>
+  </ul>
+</ng-container>

@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
+import { AuthService } from 'src/app/core/auth/auth.service';
+import { User } from 'src/app/core/models/user';
 
 @Component({
   selector: 'app-nav-bar',
@@ -6,5 +9,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./nav-bar.component.scss'],
 })
 export class NavBarComponent {
-  constructor() {}
+  public user$: Observable<User> = this.authService.user$;
+
+  constructor(private readonly authService: AuthService) {}
 }
