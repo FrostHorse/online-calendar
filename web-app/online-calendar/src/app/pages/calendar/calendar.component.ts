@@ -1,4 +1,6 @@
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { DialogService } from 'src/app/core/dialog/dialog.service';
+import { ConfirmDialogComponent } from 'src/app/shared/dialogs/confirm-dialog/confirm-dialog.component';
 import { DAYS } from './constants/days';
 
 @Component({
@@ -11,14 +13,15 @@ export class CalendarComponent implements AfterViewInit {
   public hours: string[] = this.getHours();
   public days = this.getDays();
 
-  constructor() {}
+  constructor(private readonly dialogService: DialogService) {}
 
   public ngAfterViewInit(): void {
     this.calendar?.nativeElement.scroll(0, 410);
   }
 
-  public addAppointment(day: number, startHour: number): void {
+  public openAppointmentCreation(day: number, startHour: number): void {
     console.log(day, startHour);
+    this.dialogService.open(ConfirmDialogComponent);
   }
 
   private getHours(): string[] {

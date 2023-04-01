@@ -1,9 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { authGuard } from './guards/auth.guard';
 
 const routes: Routes = [
   {
     path: 'calendar',
+    canActivate: [authGuard.canActivate],
     loadChildren: () =>
       import('../app/pages/calendar/calendar.module').then(
         (m) => m.CalendarModule
