@@ -21,7 +21,9 @@ export class CalendarComponent implements AfterViewInit {
 
   public openAppointmentCreation(day: number, startHour: number): void {
     console.log(day, startHour);
-    this.dialogService.open(ConfirmDialogComponent);
+    this.dialogService.open<ConfirmDialogComponent>(ConfirmDialogComponent, {
+      data: 'Add appointment',
+    });
   }
 
   private getHours(): string[] {

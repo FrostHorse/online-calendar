@@ -4,4 +4,13 @@
   max-width: 70vw;
   max-height: 70vh;
   background-color: aqua;
+
+  .header {
+    display: flex;
+    flex-direction: row;
+
+    .close-icon {
+      float: left;
+    }
+  }
 }
