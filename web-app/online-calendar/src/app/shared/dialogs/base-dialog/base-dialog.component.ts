@@ -1,4 +1,5 @@
 import { Component, Inject } from '@angular/core';
+import { DialogData } from 'src/app/models/dialog/dialog-data';
 import { DialogRef } from 'src/app/models/dialog/dialog-ref';
 import { DIALOG_DATA } from 'src/app/models/dialog/dialog-tokens';
 
@@ -10,7 +11,7 @@ import { DIALOG_DATA } from 'src/app/models/dialog/dialog-tokens';
 export class BaseDialogComponent {
   constructor(
     private dialogRef: DialogRef,
-    @Inject(DIALOG_DATA) public data: string
+    @Inject(DIALOG_DATA) public data: DialogData
   ) {}
 
   public close() {

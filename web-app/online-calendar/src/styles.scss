@@ -3,6 +3,7 @@
 @import "@angular/cdk/overlay-prebuilt.css";
 
 $color-primary: #4571c4;
+$text-color: #ffffff;
 
 html,
 body {
@@ -18,20 +19,35 @@ body {
 .overlay-panel {
   display: flex;
   flex-direction: column;
-  background-color: #ffffff;
+  background-color: $text-color;
 }
 
+%default-button {
+  padding: 10px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
 // General button styling
-button {
+.primary-button {
+  @extend %default-button;
   background-color: $color-primary;
   color: #ffffff;
-  padding: 10px;
   border: none;
-  border-radius: 3px;
-  cursor: pointer;
 
   &:hover {
     background-color: darken($color-primary, 10%);
+  }
+}
+
+.secondary-button {
+  @extend %default-button;
+  background-color: $text-color;
+  color: $color-primary;
+  border: 2px solid $color-primary;
+
+  &:hover {
+    background-color: darken($text-color, 10%);
   }
 }
 

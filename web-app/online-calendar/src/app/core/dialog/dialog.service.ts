@@ -2,14 +2,14 @@ import { ComponentType, Overlay } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { Injectable, Injector } from '@angular/core';
 import { DialogRef } from 'src/app/models/dialog/dialog-ref';
-import { DialogConfig } from '../../models/dialog/dialog-config';
+import { DialogData } from '../../models/dialog/dialog-data';
 import { DIALOG_DATA } from '../../models/dialog/dialog-tokens';
 
 @Injectable({ providedIn: 'root' })
 export class DialogService {
   constructor(private overlay: Overlay, private injector: Injector) {}
 
-  open<T>(component: ComponentType<T>, config?: DialogConfig): DialogRef {
+  open<T>(component: ComponentType<T>, data?: DialogData): DialogRef {
     const positionStrategy = this.overlay
       .position()
       .global()
@@ -31,7 +31,7 @@ export class DialogService {
       parent: this.injector,
       providers: [
         { provide: DialogRef, useValue: dialogRef },
-        { provide: DIALOG_DATA, useValue: config?.data },
+        { provide: DIALOG_DATA, useValue: data },
       ],
     });
 

@@ -3,14 +3,26 @@
   flex-direction: column;
   max-width: 70vw;
   max-height: 70vh;
-  background-color: aqua;
+  background-color: #d3d3d3;
+  padding: 0.5rem;
 
   .header {
     display: flex;
     flex-direction: row;
+    align-items: center;
+    font-size: 1.5rem;
+
+    .title {
+      margin-right: 1rem;
+    }
 
     .close-icon {
       float: left;
+      transition: color 0.25s ease;
+
+      &:hover {
+        color: white;
+      }
     }
   }
 }
