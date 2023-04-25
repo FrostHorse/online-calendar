@@ -51,8 +51,14 @@ input:focus {
   outline: 0;
   border-color: $color-primary;
 }
-input:focus + .input-icon i {
+input:focus + .input-icon app-icon {
   color: $color-primary;
+}
+.input-icon {
+  app-icon {
+    position: relative;
+    top: -2px;
+  }
 }
 input:focus + .input-icon:after {
   border-right-color: $color-primary;
@@ -76,7 +82,7 @@ input[type="radio"] + label:last-of-type {
   border-top-right-radius: 3px;
   border-bottom-right-radius: 3px;
 }
-input[type="radio"] + label i {
+input[type="radio"] + label app-icon {
   padding-right: 0.4em;
 }
 input[type="radio"]:checked + label,
@@ -97,7 +103,6 @@ input[type="checkbox"] + label {
 }
 input[type="checkbox"] + label:before {
   position: absolute;
-  top: 0.2em;
   left: 0;
   display: block;
   width: 1em;
@@ -107,13 +112,11 @@ input[type="checkbox"] + label:before {
 }
 input[type="checkbox"] + label:after {
   position: absolute;
-  top: 0.45em;
-  left: 0.2em;
+  left: 0.3em;
   font-size: 0.8em;
   color: #fff;
   opacity: 0;
-  font-family: FontAwesome;
-  content: "\f00c";
+  content: "✓";
 }
 input:checked + label:after {
   opacity: 1;
@@ -165,6 +168,9 @@ select option {
   line-height: 3.4em;
   text-align: center;
   pointer-events: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .input-group-icon .input-icon:after {
   position: absolute;
@@ -180,7 +186,7 @@ select option {
   transition: 0.35s ease-in-out;
   transition: all 0.35s ease-in-out;
 }
-.input-group-icon .input-icon i {
+.input-group-icon .input-icon app-icon {
   -webkit-transition: 0.35s ease-in-out;
   -moz-transition: 0.35s ease-in-out;
   -o-transition: 0.35s ease-in-out;
