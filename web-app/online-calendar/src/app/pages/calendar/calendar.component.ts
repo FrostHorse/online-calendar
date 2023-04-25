@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { DialogService } from 'src/app/core/dialog/dialog.service';
-import { ConfirmDialogComponent } from 'src/app/shared/dialogs/confirm-dialog/confirm-dialog.component';
+import { AppointmentUtil } from 'src/app/utils/appointment.util';
+import { AddAppointmentDialogComponent } from './components/add-appointment-dialog/add-appointment-dialog.component';
 import { DAYS } from './constants/days';
 
 @Component({
@@ -20,10 +21,23 @@ export class CalendarComponent implements AfterViewInit {
   }
 
   public openAppointmentCreation(day: number, startHour: number): void {
-    console.log(day, startHour);
-    this.dialogService.open<ConfirmDialogComponent>(ConfirmDialogComponent, {
-      title: 'Create appointment',
-    });
+    const startDate = this.calculateDate(day, startHour);
+    const endDate = this.calculateDate(day, startHour + 1);
+    const data = AppointmentUtil.createBaseAppointment({ startDate, endDate });
+    this.dialogService.open<AddAppointmentDialogComponent>(
+      AddAppointmentDialogComponent,
+      {
+        title: 'Create appointment',
+        data,
+      }
+    );
+  }
+
+  private calculateDate(day: number, hour: number): Date {
+    const date = new Date();
+    date.setDate(date.getDate() + (day - date.getDay()));
+    date.setHours(hour, 0, 0, 0);
+    return date;
   }
 
   private getHours(): string[] {

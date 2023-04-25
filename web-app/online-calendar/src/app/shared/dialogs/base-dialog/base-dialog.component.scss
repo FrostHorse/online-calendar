@@ -3,7 +3,8 @@
   flex-direction: column;
   max-width: 70vw;
   max-height: 70vh;
-  background-color: #d3d3d3;
+  overflow: auto;
+  background-color: #fff;
   padding: 0.5rem;
 
   .header {
@@ -17,7 +18,7 @@
     }
 
     .close-icon {
-      float: left;
+      margin-left: auto;
       transition: color 0.25s ease;
 
       &:hover {

@@ -1,8 +1,8 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { map, Observable, of, switchMap } from 'rxjs';
+import { Observable, map, of, switchMap } from 'rxjs';
 import { AuthService } from '../core/auth/auth.service';
-import { isStrictDefined } from '../utils/condition-checks';
+import { isStrictDefined } from '../utils/condition-checks.util';
 
 const canActivate: CanActivateFn = (): Observable<boolean> => {
   const authService = inject(AuthService);
