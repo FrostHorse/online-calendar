@@ -42,4 +42,16 @@ export class CalendarService {
       _id: new Types.ObjectId(id),
     });
   }
+
+  async getCalendarsForUser(userId: string): Promise<Calendar[]> {
+    return this.calendarModel.find({ownerId: new Types.ObjectId(userId)});
+  }
+
+  async addEvent(calendarId: string,eventId: string): Promise<Calendar> {
+    return await this.calendarModel.findByIdAndUpdate({_id: new Types.ObjectId(calendarId)}, {$push: {eventIds: new Types.ObjectId(eventId)}}, {new: true})
+  }
+
+  async removeEvent(calendarId: string,eventId: string): Promise<Calendar> {
+    return await this.calendarModel.findByIdAndUpdate({_id: new Types.ObjectId(calendarId)}, {$pull: {eventIds: new Types.ObjectId(eventId)}}, {new: true})
+  }
 }

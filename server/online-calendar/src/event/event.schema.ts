@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Date, HydratedDocument } from 'mongoose';
+import { Date, HydratedDocument, Types } from 'mongoose';
 
 export class Place {
   address: string;
@@ -7,6 +7,12 @@ export class Place {
   city: string;
 
   postalCode: number;
+}
+
+export class Participant {
+  participantId: Types.ObjectId;
+
+  canModify: boolean;
 }
 
 @Schema()
@@ -51,6 +57,13 @@ export class Events {
     required: true,
   })
   recurring: boolean;
+  
+  @Prop({
+    required: false,
+    default: [],
+    type: Participant
+  })
+  participants?: Participant[];
 }
 export type EventDocument = HydratedDocument<Events>;
 

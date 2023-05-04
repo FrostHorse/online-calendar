@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
 
 @Schema()
 export class Calendar {
@@ -12,6 +12,13 @@ export class Calendar {
     required: true,
   })
   ownerId: string;
+
+  @Prop({
+    required: false,
+    default: [],
+    type: Types.ObjectId
+  })
+  eventIds?: Types.ObjectId[];
 }
 export type CalendarDocument = HydratedDocument<Calendar>;
 

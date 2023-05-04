@@ -1,5 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
+
+export class VisibleCalendar {
+  calendarId: Types.ObjectId
+  canModify: boolean
+}
 
 @Schema()
 export class User {
@@ -22,6 +27,13 @@ export class User {
     required: true,
   })
   phoneNumber: string;
+
+  @Prop({
+    required: false,
+    default: [],
+    type: VisibleCalendar
+  })
+  visibleCalendars?: VisibleCalendar[];
 }
 
 export type UserDocument = HydratedDocument<User>;

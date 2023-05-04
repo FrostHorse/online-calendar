@@ -36,6 +36,23 @@ export class EventService {
     );
   }
 
+  async addParticipant(eventId: string,userId: string, canModify: boolean = false): Promise<Events> {
+    const participant = {
+      participantId: new Types.ObjectId(userId),
+      canModify
+    }
+    return await this.eventModel.findByIdAndUpdate({_id: new Types.ObjectId(eventId)}, {$push: {participants: participant}}, {new: true})
+  }
+
+  async removeParticipant(eventId: string,userId: string): Promise<Events> {
+    const event = await this.eventModel.findById(eventId).lean()
+    let participant = event.participants.find(participant => participant.participantId.toString() === userId)
+    if (participant) {
+      return await this.eventModel.findByIdAndUpdate({_id: new Types.ObjectId(eventId)}, {$pull: {participants: participant}}, {new: true})
+    }
+    return undefined;
+  }
+
   async deleteOne(id: string): Promise<Events> {
     return await this.eventModel.findByIdAndDelete({
       _id: new Types.ObjectId(id),

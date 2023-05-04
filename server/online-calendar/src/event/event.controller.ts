@@ -11,6 +11,7 @@ import { EventService } from './event.service';
 import { Events } from './event.schema';
 import { CreateEventDto } from './dtos/create-event.request.dto';
 import { UpdateEventDto } from './dtos/update-event-request.dto';
+import { ModifyParticipationDto } from './dtos/modify-participation-request.dto';
 
 @Controller('events')
 export class EventController {
@@ -19,6 +20,16 @@ export class EventController {
   @Post()
   async create(@Body() createEventDto: CreateEventDto) {
     await this.eventService.create(createEventDto);
+  }
+
+  @Post("addParticipant")
+  async addParticipantction(@Body() modifyParticipationDto: ModifyParticipationDto) {
+    return await this.eventService.addParticipant(modifyParticipationDto.eventId,modifyParticipationDto.participantId, modifyParticipationDto.canModify ? modifyParticipationDto.canModify : false);
+  }
+
+  @Post("removeParticipant")
+  async removeParticipantAction(@Body() modifyParticipationDto: ModifyParticipationDto) {
+    return await this.eventService.removeParticipant(modifyParticipationDto.eventId,modifyParticipationDto.participantId);
   }
 
   @Get()

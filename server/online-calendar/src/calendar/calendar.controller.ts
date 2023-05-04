@@ -9,8 +9,10 @@ import {
 } from '@nestjs/common';
 import { CalendarService } from './calendar.service';
 import { Calendar } from './calendar.schema';
-import { CreateCalendarDto } from './dtos/create-calendar-request.dto';
+
 import { UpdateCalendarDto } from './dtos/update-calendar-request.dto';
+import { ModifyEventDto } from './dtos/modify-event-request.dto';
+import { CreateCalendarDto } from './dtos/create-calendar-request.dto';
 
 @Controller('calendars')
 export class CalendarController {
@@ -21,9 +23,24 @@ export class CalendarController {
     await this.calendarService.create(createCalendarDto);
   }
 
+  @Post("addEvent")
+  async addEventAction(@Body() modifyEventDto: ModifyEventDto) {
+    return await this.calendarService.addEvent(modifyEventDto.calendarId,modifyEventDto.eventId);
+  }
+
+  @Post("removeEvent")
+  async removeEventAction(@Body() modifyEventDto: ModifyEventDto) {
+    return await this.calendarService.removeEvent(modifyEventDto.calendarId,modifyEventDto.eventId);
+  }
+
   @Get()
   async findAll(): Promise<Calendar[]> {
     return await this.calendarService.findAll();
+  }
+
+  @Get('user/:userId')
+  async getCalendarsForUser(@Param('userId') id: string): Promise<Calendar[]> {
+    return await this.calendarService.getCalendarsForUser(id);
   }
 
   @Get(':id')
