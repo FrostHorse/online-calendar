@@ -5,7 +5,7 @@
     </th>
     <tr *ngFor="let hour of hours; let h = index">
       <ng-container *ngFor="let day of days; let d = index">
-        <td [ngClass]="{ pointer: d }" (click)="addAppointment(d, h)">
+        <td [ngClass]="{ pointer: d }" (click)="openAppointmentCreation(d, h)">
           <div *ngIf="!d">{{ hour }}</div>
         </td>
       </ng-container>

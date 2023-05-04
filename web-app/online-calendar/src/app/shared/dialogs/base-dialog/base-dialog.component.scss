@@ -1,0 +1,29 @@
+.dialog-container {
+  display: flex;
+  flex-direction: column;
+  max-width: 70vw;
+  max-height: 70vh;
+  overflow: auto;
+  background-color: #fff;
+  padding: 0.5rem;
+
+  .header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-size: 1.5rem;
+
+    .title {
+      margin-right: 1rem;
+    }
+
+    .close-icon {
+      margin-left: auto;
+      transition: color 0.25s ease;
+
+      &:hover {
+        color: white;
+      }
+    }
+  }
+}

@@ -13,6 +13,7 @@ export class SignInComponent {
     email: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required]),
   });
+  public autoLogIn$ = this.authService.autoLogIn();
 
   constructor(private readonly authService: AuthService) {}
 

@@ -1,4 +1,55 @@
-/* You can add global styles to this file, and also import other style files */
+@import "@angular/cdk/overlay-prebuilt.css";
+@import "colors";
+
+$color-primary: #4571c4;
+$text-color: #ffffff;
+
+html,
+body {
+  font-family: Helvetica, sans-serif;
+}
+
+// Overlay backdrop styling
+.overlay-backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+// Overlay panel styling
+.overlay-panel {
+  display: flex;
+  flex-direction: column;
+  background-color: $text-color;
+}
+
+%default-button {
+  padding: 10px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+// General button styling
+.primary-button {
+  @extend %default-button;
+  background-color: $color-primary;
+  color: #ffffff;
+  border: none;
+
+  &:hover {
+    background-color: darken($color-primary, 10%);
+  }
+}
+
+.secondary-button {
+  @extend %default-button;
+  background-color: $text-color;
+  color: $color-primary;
+  border: 2px solid $color-primary;
+
+  &:hover {
+    background-color: darken($text-color, 10%);
+  }
+}
+
 body {
   padding: 0;
   margin: 0;
