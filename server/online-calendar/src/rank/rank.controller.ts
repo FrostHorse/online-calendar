@@ -11,6 +11,7 @@ import { Rank } from './rank.schema';
 import { RankService } from './rank.service';
 import { CreateRankDto } from './dtos/create-rank-request.dto';
 import { UpdateRankDto } from './dtos/update-rank-request.dto';
+import { AttachPermissionDto } from './dtos/attach-permission.dto';
 
 @Controller('ranks')
 export class RankController {
@@ -19,6 +20,16 @@ export class RankController {
   @Post()
   async create(@Body() createRankDto: CreateRankDto) {
     await this.rankService.create(createRankDto);
+  }
+
+  @Post('addPermission')
+  async addPermissionAction(@Body() attachPermissionDto: AttachPermissionDto): Promise<Rank> {
+    return await this.rankService.addPermisson(attachPermissionDto.rankId, attachPermissionDto.permissionId);
+  }
+
+  @Post('removePermission')
+  async removePermissionAction(@Body() attachPermissionDto: AttachPermissionDto): Promise<Rank>{
+    return await this.rankService.removePermisson(attachPermissionDto.rankId, attachPermissionDto.permissionId);
   }
 
   @Get()

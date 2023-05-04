@@ -37,4 +37,12 @@ export class RankService {
       _id: new Types.ObjectId(id),
     });
   }
+
+  async addPermisson(rankId: string,permissionId: string): Promise<Rank> {
+    return await this.rankModel.findByIdAndUpdate({_id: new Types.ObjectId(rankId)}, {$push: {permissions: new Types.ObjectId(permissionId)}}, {new: true})
+  }
+
+  async removePermisson(rankId: string,permissionId: string): Promise<Rank> {
+    return await this.rankModel.findByIdAndUpdate({_id: new Types.ObjectId(rankId)}, {$pull: {permissions: new Types.ObjectId(permissionId)}}, {new: true})
+  }
 }

@@ -34,6 +34,13 @@ export class User {
     type: VisibleCalendar
   })
   visibleCalendars?: VisibleCalendar[];
+
+  @Prop({
+    default: [],
+    required: true,
+    type: Types.ObjectId
+  })
+  rankIds: Types.ObjectId[];
 }
 
 export type UserDocument = HydratedDocument<User>;

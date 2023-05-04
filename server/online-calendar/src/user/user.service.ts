@@ -131,4 +131,12 @@ export class UserService {
 
     return await this.userModel.aggregate(pipeline).exec();
   }
+
+  async addRank(userId: string,rankId: string): Promise<User> {
+    return await this.userModel.findByIdAndUpdate({_id: new Types.ObjectId(userId)}, {$push: {rankIds: new Types.ObjectId(rankId)}}, {new: true})
+  }
+
+  async removeRank(userId: string,rankId: string): Promise<User> {
+    return await this.userModel.findByIdAndUpdate({_id: new Types.ObjectId(userId)}, {$pull: {rankIds: new Types.ObjectId(rankId)}}, {new: true})
+  }
 }

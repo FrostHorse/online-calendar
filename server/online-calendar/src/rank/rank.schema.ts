@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
 
 @Schema()
 export class Rank {
@@ -10,8 +10,10 @@ export class Rank {
 
   @Prop({
     required: true,
+    default:[],
+    type: Types.ObjectId
   })
-  permissions: string[];
+  permissions: Types.ObjectId[];
 }
 
 export type RankDocument = HydratedDocument<Rank>;

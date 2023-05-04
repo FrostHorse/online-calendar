@@ -10,6 +10,7 @@ import { User } from './user.schema';
 import { UserService } from './user.service';
 import { Calendar } from 'src/calendar/calendar.schema';
 import { ModifyCalendarDto } from './dtos/modify-calendar-request.dto';
+import { AttachRankDto } from './dtos/attach-rank.dto';
 
 @Controller('users')
 export class UserController {
@@ -45,6 +46,16 @@ export class UserController {
   @Post("removeCalendar")
   async removeCalendarAction(@Body() modifyCalendarDto: ModifyCalendarDto) {
     return await this.usersService.removeCalendar(modifyCalendarDto.userId,modifyCalendarDto.calendarId);
+  }
+
+  @Post("addRank")
+  async addRankAction(@Body() attachRankDto: AttachRankDto) {
+    return await this.usersService.addRank(attachRankDto.userId,attachRankDto.rankId);
+  }
+
+  @Post("removeRank")
+  async removeRankAction(@Body() attachRankDto: AttachRankDto) {
+    return await this.usersService.removeRank(attachRankDto.userId,attachRankDto.rankId);
   }
   
   // These should be last place to avoid conflicts in endpoints calling
