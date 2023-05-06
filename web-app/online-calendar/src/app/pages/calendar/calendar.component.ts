@@ -19,7 +19,9 @@ export class CalendarComponent implements AfterViewInit {
   @ViewChild('calendar') public calendar: ElementRef | undefined;
   public hours: string[] = this.getHours();
   public days = this.getDays();
-  public calendars$ = this.calendarService.calendars$.pipe(tap(console.log));
+  public selectedCalendar$ = this.calendarService.selectedCalendar$.pipe(
+    tap(console.log)
+  );
 
   constructor(
     private readonly dialogService: DialogService,

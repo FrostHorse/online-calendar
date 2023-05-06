@@ -1,11 +1,14 @@
-<ng-container *ngIf="calendars$ | async as calendars">
-  <div
-    *ngIf="(calendars | keyvalue).length; else createCalendar"
-    class="calendar-container"
-    #calendar
-  >
+<ng-container
+  *ngIf="selectedCalendar$ | async as calendar; else createCalendar"
+>
+  <div class="calendar-picker">
+    <div class="switch"><app-icon>arrow_left</app-icon></div>
+    <div class="calendar-name">{{ calendar.name }}</div>
+    <div class="switch"><app-icon>arrow_right</app-icon></div>
+  </div>
+  <div class="calendar-container" #calendar>
     <table>
-      <th *ngFor="let day of days">
+      <th class="sticky" *ngFor="let day of days">
         {{ day }}
       </th>
       <tr *ngFor="let hour of hours; let h = index">
@@ -28,7 +31,6 @@
       <div class="primary-button" (click)="openCreateCalendarDialog()">
         <app-icon [isAutoFontSize]="true">add_box</app-icon>
       </div>
-
       <div class="label">Create Calendar</div>
     </div>
   </div>

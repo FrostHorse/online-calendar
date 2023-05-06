@@ -6,17 +6,22 @@ import { tap } from 'rxjs/operators';
 import { baseUrl } from 'src/app/constants/baseUrl';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { Calendar } from 'src/app/models/calendar/calendar';
-import { selectCalendars } from '../store/selectors/calendar.selector';
+import {
+  selectCalendars,
+  selectSelectedCalendar,
+} from '../store/selectors/calendar.selector';
 
 @Injectable({ providedIn: 'root' })
 export class CalendarService {
   public calendars$: Observable<Record<string, Calendar>>;
+  public selectedCalendar$: Observable<Calendar>;
   constructor(
     private readonly http: HttpClient,
     private readonly store: Store,
     private readonly authService: AuthService
   ) {
     this.calendars$ = this.store.pipe(select(selectCalendars));
+    this.selectedCalendar$ = this.store.pipe(select(selectSelectedCalendar));
   }
 
   public crateCalendar(name: string): Observable<any> {

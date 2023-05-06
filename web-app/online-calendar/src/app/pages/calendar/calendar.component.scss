@@ -15,10 +15,13 @@ td {
   padding: 1rem;
 }
 
+.sticky {
+  position: sticky;
+  top: -1px; /* Don't forget this, required for the stickiness */
+}
+
 th {
   pointer-events: none;
-  position: sticky;
-  top: 0; /* Don't forget this, required for the stickiness */
   background-color: #a8a8a8;
   padding: 1rem;
   box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
@@ -60,8 +63,30 @@ table {
   }
 }
 
+.calendar-picker {
+  display: flex;
+  margin: 1rem 2rem 0rem 2rem;
+  padding: 1rem 0rem;
+  height: 1rem;
+  background-color: $color-primary;
+  border-radius: 6px 6px 0px 0px;
+  color: $text-color;
+  font-weight: 600;
+  justify-content: space-between;
+  align-items: center;
+  .switch {
+    margin: 0 0.5rem;
+    transition: color 0.25s ease;
+    :hover {
+      &:hover {
+        opacity: 20%;
+      }
+    }
+  }
+}
+
 .calendar-container {
-  margin: 2rem;
+  margin: 0rem 2rem;
   max-height: 85vh;
   overflow-x: scroll;
 }
