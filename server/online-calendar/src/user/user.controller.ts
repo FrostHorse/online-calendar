@@ -59,9 +59,9 @@ export class UserController {
   }
   
   // These should be last place to avoid conflicts in endpoints calling
-  @Get(':name')
-  async findOne(@Param('name') name: string): Promise<User> {
-    return await this.usersService.findOne(name);
+  @Get(':email')
+  async findOne(@Param('email') email: string): Promise<User> {
+    return await this.usersService.findOne(email);
   }
 
   @Patch(':id')
