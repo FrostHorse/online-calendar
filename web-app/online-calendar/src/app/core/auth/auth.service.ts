@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, from, Observable, tap } from 'rxjs';
+import { baseUrl } from 'src/app/constants/baseUrl';
 import { User } from 'src/app/core/models/user';
 import { Nullable } from 'src/app/models/nullable/nullable';
 
@@ -17,12 +18,12 @@ export class AuthService {
   ) {}
 
   public fetchAllUser(): Observable<any> {
-    const url = 'http://localhost:3000/users';
+    const url = `${baseUrl}/users`;
     return this.http.get<any>(url).pipe(tap(console.log));
   }
 
   public signUp(user: User): Observable<User> {
-    const url = 'http://localhost:3000/users';
+    const url = `${baseUrl}/users`;
     return this.http.post<any>(url, user).pipe(
       tap(() => {
         this.router.navigate(['sign-in']);
@@ -31,7 +32,7 @@ export class AuthService {
   }
 
   public signIn(email: string, password: string): Observable<User> {
-    const url = 'http://localhost:3000/users/login';
+    const url = `${baseUrl}/users/login`;
     return this.http.post<any>(url, { email, password }).pipe(
       tap((user) => {
         if (user) {

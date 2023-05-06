@@ -1,8 +1,14 @@
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { switchMap, take } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { DialogService } from 'src/app/core/dialog/dialog.service';
+import { fetchCalendarActions } from 'src/app/pages/calendar/store/actions/calendar.actions';
 import { AppointmentUtil } from 'src/app/utils/appointment.util';
 import { AddAppointmentDialogComponent } from './components/add-appointment-dialog/add-appointment-dialog.component';
+import { CreateCalendarDialogComponent } from './components/create-calendar-dialog/create-calendar-dialog.component';
 import { DAYS } from './constants/days';
+import { CalendarService } from './services/calendar.service';
 
 @Component({
   selector: 'app-calendar',
@@ -13,8 +19,15 @@ export class CalendarComponent implements AfterViewInit {
   @ViewChild('calendar') public calendar: ElementRef | undefined;
   public hours: string[] = this.getHours();
   public days = this.getDays();
+  public calendars$ = this.calendarService.calendars$.pipe(tap(console.log));
 
-  constructor(private readonly dialogService: DialogService) {}
+  constructor(
+    private readonly dialogService: DialogService,
+    private readonly store: Store,
+    private readonly calendarService: CalendarService
+  ) {
+    this.store.dispatch(fetchCalendarActions());
+  }
 
   public ngAfterViewInit(): void {
     this.calendar?.nativeElement.scroll(0, 410);
@@ -31,6 +44,19 @@ export class CalendarComponent implements AfterViewInit {
         data,
       }
     );
+  }
+
+  public openCreateCalendarDialog(): void {
+    this.dialogService
+      .open<CreateCalendarDialogComponent>(CreateCalendarDialogComponent, {
+        title: 'Create Calendar',
+      })
+      .afterClosed()
+      .pipe(
+        switchMap((name) => this.calendarService.crateCalendar(name)),
+        take(1)
+      )
+      .subscribe();
   }
 
   private calculateDate(day: number, hour: number): Date {

@@ -1,10 +1,10 @@
 <app-base-dialog>
   <div class="form-container">
-    <form>
+    <form [formGroup]="createAppointmentForm">
       <div class="row">
         <h4>Name</h4>
         <div class="input-group input-group-icon">
-          <input type="text" placeholder="" />
+          <input type="text" formControlName="name" placeholder="" />
           <div class="input-icon">
             <app-icon>event</app-icon>
           </div>
@@ -13,18 +13,18 @@
       <div class="row">
         <h4>Address</h4>
         <div class="input-group input-group-icon">
-          <input type="text" placeholder="" />
+          <input type="text" formControlName="address" placeholder="" />
           <div class="input-icon">
             <app-icon>home</app-icon>
           </div>
         </div>
         <div class="col-half">
           <h4>Postal Code</h4>
-          <input type="text" placeholder="" />
+          <input type="text" formControlName="postalCode" placeholder="" />
         </div>
         <div class="col-half">
           <h4>City</h4>
-          <input type="text" placeholder="" />
+          <input type="text" formControlName="city" placeholder="" />
         </div>
       </div>
       <div class="row">
@@ -32,13 +32,39 @@
           <h4>Start Date</h4>
           <div class="input-group">
             <div class="col-third">
-              <input type="text" placeholder="YYYY" />
+              <input
+                type="text"
+                formControlName="startDateYYYY"
+                placeholder="YYYY"
+                maxlength="4"
+              />
             </div>
             <div class="col-third">
-              <input type="text" placeholder="MM" />
+              <input
+                #startDateM
+                type="text"
+                formControlName="startDateM"
+                placeholder="MM"
+                maxlength="2"
+                (blur)="formatToTwoDigit('startDateM', startDateM.value, 12)"
+              />
             </div>
             <div class="col-third">
-              <input type="text" placeholder="DD" />
+              <input
+                #startDateD
+                type="text"
+                formControlName="startDateD"
+                placeholder="DD"
+                maxlength="2"
+                (blur)="
+                  formatToTwoDigit(
+                    'startDateD',
+                    startDateD.value,
+                    31,
+                    startDateM.value
+                  )
+                "
+              />
             </div>
           </div>
         </div>
@@ -46,31 +72,107 @@
           <h4>End Date</h4>
           <div class="input-group">
             <div class="col-third">
-              <input type="text" placeholder="YYYY" />
+              <input
+                type="text"
+                formControlName="endDateYYYY"
+                placeholder="YYYY"
+                maxlength="4"
+              />
             </div>
             <div class="col-third">
-              <input type="text" placeholder="MM" />
+              <input
+                #endDateM
+                type="text"
+                formControlName="endDateM"
+                placeholder="MM"
+                maxlength="2"
+                (blur)="formatToTwoDigit('endDateM', endDateM.value, 12)"
+              />
             </div>
             <div class="col-third">
-              <input type="text" placeholder="DD" />
+              <input
+                #endDateD
+                type="text"
+                formControlName="endDateD"
+                placeholder="DD"
+                maxlength="2"
+                (blur)="
+                  formatToTwoDigit(
+                    'endDateD',
+                    endDateD.value,
+                    31,
+                    startDateM.value
+                  )
+                "
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-half">
+          <div class="input-group">
+            <div class="col-third">
+              <input
+                #startDateHH
+                type="text"
+                formControlName="startDateHH"
+                placeholder="HH"
+                maxlength="2"
+                (blur)="formatToTwoDigit('startDateHH', startDateHH.value, 24)"
+              />
+            </div>
+            <div class="col-third">
+              <input
+                #startDateMM
+                type="text"
+                formControlName="startDateMM"
+                placeholder="MM"
+                maxlength="2"
+                (blur)="formatToTwoDigit('startDateMM', startDateMM.value, 60)"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="col-half">
+          <div class="input-group">
+            <div class="col-third">
+              <input
+                #endDateHH
+                type="text"
+                formControlName="endDateHH"
+                placeholder="HH"
+                maxlength="2"
+                (blur)="formatToTwoDigit('endDateHH', endDateHH.value, 24)"
+              />
+            </div>
+            <div class="col-third">
+              <input
+                #endDateMM
+                type="text"
+                formControlName="endDateMM"
+                placeholder="MM"
+                maxlength="2"
+                (blur)="formatToTwoDigit('endDateMM', endDateMM.value, 60)"
+              />
             </div>
           </div>
         </div>
       </div>
       <div class="row">
         <div class="input-group">
-          <input id="all-day" type="checkbox" />
+          <input id="all-day" type="checkbox" formControlName="allDay" />
           <label for="all-day">All Day</label>
         </div>
       </div>
     </form>
-  </div>
-  <div class="footer">
-    <div class="button-container">
-      <button class="secondary-button" (click)="close()">Cancel</button
-      ><button class="primary-button" (click)="addAppointment()">
-        Create Appointment
-      </button>
+    <div class="footer">
+      <div class="button-container">
+        <button class="secondary-button" (click)="close()">Cancel</button
+        ><button class="primary-button" (click)="createAppointment()">
+          Create Appointment
+        </button>
+      </div>
     </div>
   </div>
 </app-base-dialog>

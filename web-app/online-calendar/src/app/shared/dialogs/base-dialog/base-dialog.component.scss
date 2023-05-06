@@ -1,9 +1,8 @@
+@import "colors";
+
 .dialog-container {
   display: flex;
   flex-direction: column;
-  max-width: 70vw;
-  max-height: 70vh;
-  overflow: auto;
   background-color: #fff;
   padding: 0.5rem;
 
@@ -14,7 +13,9 @@
     font-size: 1.5rem;
 
     .title {
-      margin-right: 1rem;
+      margin: 0.5rem;
+      font-weight: 600;
+      color: $color-primary;
     }
 
     .close-icon {
@@ -22,8 +23,14 @@
       transition: color 0.25s ease;
 
       &:hover {
-        color: white;
+        opacity: 20%;
       }
     }
+  }
+
+  .dialog-content {
+    max-width: 70vw;
+    max-height: 70vh;
+    overflow: auto;
   }
 }

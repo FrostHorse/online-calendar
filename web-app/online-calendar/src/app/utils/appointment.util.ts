@@ -7,7 +7,7 @@ export class AppointmentUtil {
   ): Appointment {
     return {
       id: '',
-      name: '',
+      name: 'Appointment',
       place: defaultPlace,
       ownerId: '',
       startDate: new Date(),

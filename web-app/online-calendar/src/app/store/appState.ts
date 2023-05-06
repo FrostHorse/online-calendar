@@ -1,6 +1,7 @@
-import { CalendarState } from '../pages/calendar/store/calendarState';
+import { Calendar } from '../models/calendar/calendar';
 
 export interface AppState {
-  calendarState?: CalendarState;
+  calendars: Record<string, Calendar>;
+  selectedCalendar: string;
   isLoading?: boolean;
 }

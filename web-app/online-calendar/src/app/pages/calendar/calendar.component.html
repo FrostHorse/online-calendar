@@ -1,14 +1,35 @@
-<div class="calendar-container" #calendar>
-  <table>
-    <th *ngFor="let day of days">
-      {{ day }}
-    </th>
-    <tr *ngFor="let hour of hours; let h = index">
-      <ng-container *ngFor="let day of days; let d = index">
-        <td [ngClass]="{ pointer: d }" (click)="openAppointmentCreation(d, h)">
-          <div *ngIf="!d">{{ hour }}</div>
-        </td>
-      </ng-container>
-    </tr>
-  </table>
-</div>
+<ng-container *ngIf="calendars$ | async as calendars">
+  <div
+    *ngIf="(calendars | keyvalue).length; else createCalendar"
+    class="calendar-container"
+    #calendar
+  >
+    <table>
+      <th *ngFor="let day of days">
+        {{ day }}
+      </th>
+      <tr *ngFor="let hour of hours; let h = index">
+        <ng-container *ngFor="let day of days; let d = index">
+          <td
+            [ngClass]="{ pointer: d }"
+            (click)="openAppointmentCreation(d, h)"
+          >
+            <div *ngIf="!d">{{ hour }}</div>
+          </td>
+        </ng-container>
+      </tr>
+    </table>
+  </div>
+</ng-container>
+
+<ng-template #createCalendar>
+  <div class="create-calendar-container">
+    <div class="create-calendar-wrapper">
+      <div class="primary-button" (click)="openCreateCalendarDialog()">
+        <app-icon [isAutoFontSize]="true">add_box</app-icon>
+      </div>
+
+      <div class="label">Create Calendar</div>
+    </div>
+  </div>
+</ng-template>
