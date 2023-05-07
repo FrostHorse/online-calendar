@@ -6,9 +6,13 @@ export const selectCalendarAction = createAction(
   props<{ calendarId: string }>()
 );
 
-export const fetchCalendarActions = createAction('[Calendar] Fetch Calendars');
+export const nextCalendarAction = createAction('[Calendar] Next Calendar');
+export const previousCalendarAction = createAction(
+  '[Calendar] Previous Calendar'
+);
+export const fetchCalendarAction = createAction('[Calendar] Fetch Calendars');
 
-export const loadCalendarsActions = createAction(
+export const loadCalendarsAction = createAction(
   '[Calendar] Load Calendars',
   props<{ calendars: Calendar[] }>()
 );

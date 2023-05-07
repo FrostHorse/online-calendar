@@ -2,9 +2,13 @@
   *ngIf="selectedCalendar$ | async as calendar; else createCalendar"
 >
   <div class="calendar-picker">
-    <div class="switch"><app-icon>arrow_left</app-icon></div>
+    <div class="switch" (click)="previousCalendar()">
+      <app-icon>arrow_left</app-icon>
+    </div>
     <div class="calendar-name">{{ calendar.name }}</div>
-    <div class="switch"><app-icon>arrow_right</app-icon></div>
+    <div class="switch" (click)="nextCalendar()">
+      <app-icon>arrow_right</app-icon>
+    </div>
   </div>
   <div class="calendar-container" #calendar>
     <table>

@@ -1,26 +1,66 @@
 import { Injectable } from '@angular/core';
-import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
 import { map, switchMap } from 'rxjs';
 import { CalendarService } from '../../services/calendar.service';
 import {
-  fetchCalendarActions,
-  loadCalendarsActions,
+  fetchCalendarAction,
+  loadCalendarsAction,
+  nextCalendarAction,
+  previousCalendarAction,
   selectCalendarAction,
 } from '../actions/calendar.actions';
 
 @Injectable()
 export class CalendarEffects {
+  selectNextCalendar$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(nextCalendarAction),
+      concatLatestFrom(() => [
+        this.calendarService.calendars$,
+        this.calendarService.selectedCalendar$,
+      ]),
+      map(([, calendars, { _id }]) => {
+        const calendarIds = Object.keys(calendars);
+        const newIndex = calendarIds.indexOf(_id) + 1;
+        const calendarId =
+          newIndex < calendarIds.length
+            ? calendarIds[newIndex]
+            : calendarIds[0];
+        return selectCalendarAction({ calendarId });
+      })
+    )
+  );
+
+  selectPreviousCalendar$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(previousCalendarAction),
+      concatLatestFrom(() => [
+        this.calendarService.calendars$,
+        this.calendarService.selectedCalendar$,
+      ]),
+      map(([, calendars, { _id }]) => {
+        const calendarIds = Object.keys(calendars);
+        const newIndex = calendarIds.indexOf(_id) - 1;
+        const calendarId =
+          newIndex >= 0
+            ? calendarIds[newIndex]
+            : calendarIds[calendarIds.length - 1];
+        return selectCalendarAction({ calendarId });
+      })
+    )
+  );
+
   fetchCalendars$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fetchCalendarActions),
+      ofType(fetchCalendarAction),
       switchMap(() => this.calendarService.loadCalendars()),
-      map((calendars) => loadCalendarsActions({ calendars }))
+      map((calendars) => loadCalendarsAction({ calendars }))
     )
   );
 
   selectCalendar$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(loadCalendarsActions),
+      ofType(loadCalendarsAction),
       map(({ calendars }) =>
         selectCalendarAction({ calendarId: calendars?.[0]?._id ?? '' })
       )

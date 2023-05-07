@@ -3,7 +3,11 @@ import { Store } from '@ngrx/store';
 import { switchMap, take } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { DialogService } from 'src/app/core/dialog/dialog.service';
-import { fetchCalendarActions } from 'src/app/pages/calendar/store/actions/calendar.actions';
+import {
+  fetchCalendarAction,
+  nextCalendarAction,
+  previousCalendarAction,
+} from 'src/app/pages/calendar/store/actions/calendar.actions';
 import { AppointmentUtil } from 'src/app/utils/appointment.util';
 import { AddAppointmentDialogComponent } from './components/add-appointment-dialog/add-appointment-dialog.component';
 import { CreateCalendarDialogComponent } from './components/create-calendar-dialog/create-calendar-dialog.component';
@@ -28,7 +32,7 @@ export class CalendarComponent implements AfterViewInit {
     private readonly store: Store,
     private readonly calendarService: CalendarService
   ) {
-    this.store.dispatch(fetchCalendarActions());
+    this.store.dispatch(fetchCalendarAction());
   }
 
   public ngAfterViewInit(): void {
@@ -59,6 +63,14 @@ export class CalendarComponent implements AfterViewInit {
         take(1)
       )
       .subscribe();
+  }
+
+  public nextCalendar(): void {
+    this.store.dispatch(nextCalendarAction());
+  }
+
+  public previousCalendar(): void {
+    this.store.dispatch(previousCalendarAction());
   }
 
   private calculateDate(day: number, hour: number): Date {
