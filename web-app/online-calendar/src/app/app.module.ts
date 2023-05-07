@@ -11,6 +11,7 @@ import { NavBarModule } from './layout/nav-bar/nav-bar.module';
 import { CalendarEffects } from './pages/calendar/store/effects/calendar.effects';
 import { calendarReducer } from './pages/calendar/store/reducers/calendar.reducer';
 import { selectedCalendarReducer } from './pages/calendar/store/reducers/selected-calendar.reducer';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [AppComponent],
@@ -25,6 +26,7 @@ import { selectedCalendarReducer } from './pages/calendar/store/reducers/selecte
       {}
     ),
     StoreDevtoolsModule.instrument(),
+    BrowserAnimationsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

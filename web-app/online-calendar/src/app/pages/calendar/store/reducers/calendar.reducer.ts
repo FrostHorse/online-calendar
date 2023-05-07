@@ -1,8 +1,13 @@
 import { createReducer, on } from '@ngrx/store';
 import { Calendar } from 'src/app/models/calendar/calendar';
-import { loadCalendarsAction } from '../actions/calendar.actions';
+import {
+  createCalendarAction,
+  editCalendarAction,
+  loadCalendarsAction,
+  removeCalendarAction,
+} from '../actions/calendar.actions';
 
-const initialState = {};
+const initialState: Record<string, Calendar> = {};
 
 export const calendarReducer = createReducer(
   initialState,
@@ -14,5 +19,13 @@ export const calendarReducer = createReducer(
       },
       {}
     )
-  )
+  ),
+  on(createCalendarAction, editCalendarAction, (state, { calendar }) =>
+    Object.assign({ ...state }, { [calendar._id]: calendar })
+  ),
+  on(removeCalendarAction, (state, { calendarId }) => {
+    const newState = { ...state };
+    delete newState[calendarId];
+    return newState;
+  })
 );

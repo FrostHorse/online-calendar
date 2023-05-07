@@ -1,0 +1,34 @@
+<div class="create-calendar-container">
+  <div class="create-calendar-wrapper">
+    <div class="calendar-tile-container" *ngIf="calendars">
+      <div
+        class="calendar-tile"
+        *ngFor="let calendar of calendars | keyvalue"
+        (click)="selectedCalendar($event, calendar.key)"
+      >
+        <div class="calendar-menu-container">
+          <app-icon [matMenuTriggerFor]="menu" class="calendar-menu"
+            >more_vert</app-icon
+          >
+          <mat-menu #menu="matMenu" class="menu">
+            <app-icon (click)="openEditCalendarDialog(calendar.value)"
+              >edit_note</app-icon
+            >
+            <app-icon (click)="openRemoveCalendarDialog(calendar.value)"
+              >delete</app-icon
+            >
+          </mat-menu>
+        </div>
+        <div class="title">
+          {{ calendar.value.name }}
+        </div>
+      </div>
+      <div
+        class="calendar-tile add-button"
+        (click)="openCreateCalendarDialog()"
+      >
+        <app-icon [isAutoFontSize]="true">add_box</app-icon>
+      </div>
+    </div>
+  </div>
+</div>

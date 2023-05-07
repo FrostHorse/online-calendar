@@ -1,16 +1,22 @@
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { switchMap, take } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { filter, map, switchMap, take } from 'rxjs';
 import { DialogService } from 'src/app/core/dialog/dialog.service';
+import { Calendar } from 'src/app/models/calendar/calendar';
 import {
+  editCalendarAction,
   fetchCalendarAction,
   nextCalendarAction,
   previousCalendarAction,
+  removeCalendarAction,
+  selectCalendarAction,
 } from 'src/app/pages/calendar/store/actions/calendar.actions';
+import { ConfirmDialogComponent } from 'src/app/shared/dialogs/confirm-dialog/confirm-dialog.component';
 import { AppointmentUtil } from 'src/app/utils/appointment.util';
+import { isStrictDefined } from 'src/app/utils/condition-checks.util';
 import { AddAppointmentDialogComponent } from './components/add-appointment-dialog/add-appointment-dialog.component';
 import { CreateCalendarDialogComponent } from './components/create-calendar-dialog/create-calendar-dialog.component';
+import { EditCalendarDialogComponent } from './components/edit-calendar-dialog/edit-calendar-dialog.component';
 import { DAYS } from './constants/days';
 import { CalendarService } from './services/calendar.service';
 
@@ -23,9 +29,8 @@ export class CalendarComponent implements AfterViewInit {
   @ViewChild('calendar') public calendar: ElementRef | undefined;
   public hours: string[] = this.getHours();
   public days = this.getDays();
-  public selectedCalendar$ = this.calendarService.selectedCalendar$.pipe(
-    tap(console.log)
-  );
+  public calendars$ = this.calendarService.calendars$;
+  public selectedCalendar$ = this.calendarService.selectedCalendar$;
 
   constructor(
     private readonly dialogService: DialogService,
@@ -37,6 +42,10 @@ export class CalendarComponent implements AfterViewInit {
 
   public ngAfterViewInit(): void {
     this.calendar?.nativeElement.scroll(0, 410);
+  }
+
+  public selectCalendar(calendarId: string): void {
+    this.store.dispatch(selectCalendarAction({ calendarId }));
   }
 
   public openAppointmentCreation(day: number, startHour: number): void {
@@ -59,7 +68,50 @@ export class CalendarComponent implements AfterViewInit {
       })
       .afterClosed()
       .pipe(
+        filter(isStrictDefined),
         switchMap((name) => this.calendarService.crateCalendar(name)),
+        take(1)
+      )
+      .subscribe();
+  }
+
+  public openEditCalendarDialog(calendar: Calendar): void {
+    this.dialogService
+      .open<EditCalendarDialogComponent>(EditCalendarDialogComponent, {
+        title: 'Edit Calendar',
+        data: calendar.name,
+      })
+      .afterClosed()
+      .pipe(
+        filter(isStrictDefined),
+        map((name) =>
+          this.store.dispatch(
+            editCalendarAction({ calendar: { ...calendar, name } })
+          )
+        ),
+        take(1)
+      )
+      .subscribe();
+  }
+
+  public openRemoveCalendarDialog(calendar: Calendar): void {
+    this.dialogService
+      .open<ConfirmDialogComponent>(ConfirmDialogComponent, {
+        title: 'Remove Calendar',
+        data: {
+          message: `The ${calendar.name} calendar will be permanently deleted.`,
+        },
+      })
+      .afterClosed()
+      .pipe(
+        filter(isStrictDefined),
+        map(
+          (confirm) =>
+            confirm &&
+            this.store.dispatch(
+              removeCalendarAction({ calendarId: calendar._id })
+            )
+        ),
         take(1)
       )
       .subscribe();

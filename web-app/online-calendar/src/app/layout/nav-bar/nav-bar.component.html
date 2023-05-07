@@ -1,7 +1,12 @@
 <ng-container *ngIf="user$ | async as user">
   <ul>
     <li>
-      <a [routerLink]="'/calendar'" routerLinkActive="active">Calendar</a>
+      <a
+        [routerLink]="'/calendar'"
+        routerLinkActive="active"
+        (click)="deselectCalendar()"
+        >Calendars</a
+      >
     </li>
     <li class="right">
       <a>{{ user.name }}</a>

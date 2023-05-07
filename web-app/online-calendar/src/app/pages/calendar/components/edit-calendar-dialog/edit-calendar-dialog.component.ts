@@ -5,22 +5,28 @@ import { DialogRef } from 'src/app/models/dialog/dialog-ref';
 import { DIALOG_DATA } from 'src/app/models/dialog/dialog-tokens';
 
 @Component({
-  selector: 'app-create-calendar-dialog',
-  templateUrl: './create-calendar-dialog.component.html',
-  styleUrls: ['./create-calendar-dialog.component.scss'],
+  selector: 'app-edit-calendar-dialog',
+  templateUrl: './edit-calendar-dialog.component.html',
+  styleUrls: ['./edit-calendar-dialog.component.scss'],
 })
-export class CreateCalendarDialogComponent {
-  public createCalendarForm = new FormGroup({
+export class EditCalendarDialogComponent {
+  public editCalendarForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(1)]),
   });
   constructor(
     private dialogRef: DialogRef,
     @Inject(DIALOG_DATA) public data: DialogData
-  ) {}
+  ) {
+    this.setForm(data.data);
+  }
 
-  public createCalendar() {
-    if (this.createCalendarForm.valid) {
-      this.dialogRef.close(this.createCalendarForm.value.name);
+  public setForm(name: string): void {
+    this.editCalendarForm.patchValue({ name });
+  }
+
+  public editCalendar() {
+    if (this.editCalendarForm.valid) {
+      this.dialogRef.close(this.editCalendarForm.value.name);
     }
   }
 

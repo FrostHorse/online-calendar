@@ -1,8 +1,11 @@
 <app-base-dialog>
+  <div *ngIf="data.data.message" class="message">
+    {{ data.data.message }}
+  </div>
   <div class="footer">
     <div class="button-container">
       <button class="secondary-button" (click)="close()">Cancel</button
-      ><button class="primary-button">OK</button>
+      ><button class="primary-button" (click)="ok()">OK</button>
     </div>
   </div>
 </app-base-dialog>

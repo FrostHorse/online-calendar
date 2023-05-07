@@ -14,6 +14,10 @@ export class ConfirmDialogComponent {
     @Inject(DIALOG_DATA) public data: DialogData
   ) {}
 
+  public ok() {
+    this.dialogRef.close(true);
+  }
+
   public close() {
     this.dialogRef.close();
   }

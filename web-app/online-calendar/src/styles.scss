@@ -1,5 +1,6 @@
 @import "@angular/cdk/overlay-prebuilt.css";
 @import "colors";
+@import "buttons";
 
 $text-color: #ffffff;
 
@@ -21,11 +22,14 @@ body {
   background-color: $text-color;
 }
 
-%default-button {
-  padding: 10px;
-  border-radius: 6px;
-  font-weight: 600;
-  cursor: pointer;
+.mat-mdc-menu-content {
+  width: fit-content;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  color: $color-primary;
+  app-icon:hover {
+    color: darken($color-primary, 20%);
+  }
 }
 // General button styling
 .primary-button {
@@ -33,10 +37,6 @@ body {
   background-color: $color-primary;
   color: #ffffff;
   border: none;
-
-  &:hover {
-    background-color: darken($color-primary, 10%);
-  }
 }
 
 .secondary-button {
@@ -53,4 +53,13 @@ body {
 body {
   padding: 0;
   margin: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }

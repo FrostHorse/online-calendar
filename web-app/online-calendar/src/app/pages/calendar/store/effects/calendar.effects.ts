@@ -3,10 +3,12 @@ import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
 import { map, switchMap } from 'rxjs';
 import { CalendarService } from '../../services/calendar.service';
 import {
+  editCalendarAction,
   fetchCalendarAction,
   loadCalendarsAction,
   nextCalendarAction,
   previousCalendarAction,
+  removeCalendarAction,
   selectCalendarAction,
 } from '../actions/calendar.actions';
 
@@ -50,6 +52,26 @@ export class CalendarEffects {
     )
   );
 
+  editCalendars$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(editCalendarAction),
+        switchMap(({ calendar }) => this.calendarService.editCalendar(calendar))
+      ),
+    { dispatch: false }
+  );
+
+  removeCalendars$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(removeCalendarAction),
+        switchMap(({ calendarId }) =>
+          this.calendarService.removeCalendar(calendarId)
+        )
+      ),
+    { dispatch: false }
+  );
+
   fetchCalendars$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fetchCalendarAction),
@@ -58,14 +80,14 @@ export class CalendarEffects {
     )
   );
 
-  selectCalendar$ = createEffect(() =>
+  /* selectCalendar$ = createEffect(() =>
     this.actions$.pipe(
       ofType(loadCalendarsAction),
       map(({ calendars }) =>
         selectCalendarAction({ calendarId: calendars?.[0]?._id ?? '' })
       )
     )
-  );
+  ); */
 
   constructor(
     private readonly actions$: Actions,

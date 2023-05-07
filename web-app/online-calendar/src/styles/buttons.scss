@@ -1,0 +1,10 @@
+%default-button {
+  padding: 10px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    background-color: darken($color-primary, 10%);
+  }
+}

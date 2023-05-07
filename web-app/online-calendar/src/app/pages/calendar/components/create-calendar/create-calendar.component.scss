@@ -1,0 +1,67 @@
+@import "colors";
+@import "buttons";
+
+%tile {
+  @extend %default-button;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  height: 5rem;
+  width: 5rem;
+
+  justify-content: center;
+  align-items: center;
+  background-color: $color-primary;
+  color: $text-color;
+}
+
+.create-calendar-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+
+  .create-calendar-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+
+    .add-button {
+      font-size: 4rem;
+      color: $text-color;
+    }
+
+    .calendar-tile-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+
+      .calendar-tile {
+        margin: 0.5rem;
+        @extend %tile;
+
+        .title {
+          user-select: none;
+        }
+
+        .calendar-menu-container {
+          position: relative;
+          width: 0;
+          height: 0;
+
+          .calendar-menu {
+            position: absolute;
+            top: -2rem;
+            right: -3rem;
+
+            &:hover {
+              opacity: 40%;
+            }
+          }
+        }
+      }
+    }
+  }
+}

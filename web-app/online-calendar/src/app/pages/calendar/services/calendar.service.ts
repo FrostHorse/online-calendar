@@ -1,11 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { Observable, switchMap } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Observable, map, switchMap } from 'rxjs';
 import { baseUrl } from 'src/app/constants/baseUrl';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { Calendar } from 'src/app/models/calendar/calendar';
+import { ConverterUtil } from 'src/app/utils/converter.util';
+import { createCalendarAction } from '../store/actions/calendar.actions';
 import {
   selectCalendars,
   selectSelectedCalendar,
@@ -30,8 +31,27 @@ export class CalendarService {
       switchMap((user) =>
         this.http.post<any>(url, { name, ownerId: user?._id })
       ),
-      tap(console.log)
+      map((calendar) =>
+        this.store.dispatch(
+          createCalendarAction({
+            calendar: ConverterUtil.castObjectToCalendar(calendar),
+          })
+        )
+      )
     );
+  }
+
+  public editCalendar(calendar: Calendar): Observable<any> {
+    const url = `${baseUrl}/calendars/${calendar._id}`;
+    return this.http.patch<any>(url, {
+      name: calendar.name,
+      ownerId: calendar.ownerId,
+    });
+  }
+
+  public removeCalendar(id: string): Observable<any> {
+    const url = `${baseUrl}/calendars/${id}`;
+    return this.http.delete<any>(url);
   }
 
   public loadCalendars(): Observable<Calendar[]> {

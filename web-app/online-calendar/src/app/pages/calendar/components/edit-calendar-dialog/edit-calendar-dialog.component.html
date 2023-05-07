@@ -1,0 +1,28 @@
+<app-base-dialog>
+  <div class="form-container">
+    <form [formGroup]="editCalendarForm">
+      <div class="row">
+        <h4>Name</h4>
+        <div class="input-group input-group-icon">
+          <input
+            type="text"
+            formControlName="name"
+            placeholder=""
+            minlength="1"
+          />
+          <div class="input-icon">
+            <app-icon>calendar_add_on</app-icon>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="footer">
+      <div class="button-container">
+        <button class="secondary-button" (click)="close()">Cancel</button
+        ><button class="primary-button" (click)="editCalendar()">
+          Edit Calendar
+        </button>
+      </div>
+    </div>
+  </div>
+</app-base-dialog>
