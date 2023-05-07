@@ -9,8 +9,10 @@ import { FormatPipeModule } from 'src/app/shared/pipes/format/format-pipe.module
 import { CalendarRoutingModule } from './calendar-routing.module';
 import { CalendarComponent } from './calendar.component';
 import { AddAppointmentDialogComponent } from './components/add-appointment-dialog/add-appointment-dialog.component';
+import { CalendarPickerComponent } from './components/calendar-picker/calendar-picker.component';
 import { CreateCalendarDialogComponent } from './components/create-calendar-dialog/create-calendar-dialog.component';
 import { CreateCalendarComponent } from './components/create-calendar/create-calendar.component';
+import { CurrentCalendarComponent } from './components/current-calendar/current-calendar.component';
 import { EditCalendarDialogComponent } from './components/edit-calendar-dialog/edit-calendar-dialog.component';
 import { CalendarService } from './services/calendar.service';
 
@@ -31,6 +33,8 @@ import { CalendarService } from './services/calendar.service';
     CreateCalendarDialogComponent,
     CreateCalendarComponent,
     EditCalendarDialogComponent,
+    CurrentCalendarComponent,
+    CalendarPickerComponent,
   ],
   exports: [CalendarComponent],
   providers: [CalendarService],

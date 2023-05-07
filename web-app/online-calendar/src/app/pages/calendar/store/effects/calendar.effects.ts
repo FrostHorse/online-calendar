@@ -1,16 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
 import { map, switchMap } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { CalendarService } from '../../services/calendar.service';
+import { createAppointmentAction } from '../actions/appointment.actions';
 import {
   editCalendarAction,
-  fetchCalendarAction,
   loadCalendarsAction,
   nextCalendarAction,
   previousCalendarAction,
   removeCalendarAction,
   selectCalendarAction,
 } from '../actions/calendar.actions';
+import { initCalendarAction } from '../actions/init-calendar.actions';
 
 @Injectable()
 export class CalendarEffects {
@@ -74,20 +76,36 @@ export class CalendarEffects {
 
   fetchCalendars$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fetchCalendarAction),
+      ofType(initCalendarAction, createAppointmentAction),
+      tap(console.log),
       switchMap(() => this.calendarService.loadCalendars()),
       map((calendars) => loadCalendarsAction({ calendars }))
     )
   );
 
-  /* selectCalendar$ = createEffect(() =>
+  saveSelectedCalendarToStorage$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(selectCalendarAction),
+        tap(({ calendarId }) => {
+          localStorage.setItem('selectedCalendar', calendarId);
+        })
+      ),
+    { dispatch: false }
+  );
+
+  selectFromStorageCalendar$ = createEffect(() =>
     this.actions$.pipe(
       ofType(loadCalendarsAction),
-      map(({ calendars }) =>
-        selectCalendarAction({ calendarId: calendars?.[0]?._id ?? '' })
-      )
+      map(({ calendars }) => {
+        const localCalendarId = localStorage.getItem('selectedCalendar') ?? '';
+        const calendarId = calendars.some(({ _id }) => localCalendarId === _id)
+          ? localCalendarId
+          : '';
+        return selectCalendarAction({ calendarId });
+      })
     )
-  ); */
+  );
 
   constructor(
     private readonly actions$: Actions,

@@ -1,3 +1,4 @@
+import { Appointment } from '../models/appointment/appointment';
 import { Calendar } from '../models/calendar/calendar';
 
 export class ConverterUtil {
@@ -6,7 +7,15 @@ export class ConverterUtil {
       _id: object._id,
       name: object.name,
       ownerId: object.ownerId,
-      appointments: object.eventIds,
+      appointmentIds: object.eventIds,
+    };
+  }
+
+  public static castObjectToAppointment(object: any): Appointment {
+    return {
+      ...object,
+      startDate: new Date(object.startDate),
+      endDate: new Date(object.endDate),
     };
   }
 }

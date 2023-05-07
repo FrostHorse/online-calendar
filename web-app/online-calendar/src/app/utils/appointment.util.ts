@@ -6,13 +6,13 @@ export class AppointmentUtil {
     appointment?: Partial<Appointment>
   ): Appointment {
     return {
-      id: '',
+      _id: '',
       name: 'Appointment',
       place: defaultPlace,
       ownerId: '',
       startDate: new Date(),
       endDate: new Date(),
-      comment: '',
+      comment: '-',
       allDay: false,
       recurring: false,
       ...appointment,

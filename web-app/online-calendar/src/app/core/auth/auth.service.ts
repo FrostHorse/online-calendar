@@ -19,7 +19,7 @@ export class AuthService {
 
   public fetchAllUser(): Observable<any> {
     const url = `${baseUrl}/users`;
-    return this.http.get<any>(url).pipe(tap(console.log));
+    return this.http.get<any>(url);
   }
 
   public signUp(user: User): Observable<User> {

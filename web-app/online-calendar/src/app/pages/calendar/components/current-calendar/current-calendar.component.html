@@ -1,0 +1,18 @@
+<div class="calendar-container" #calendar>
+  <table>
+    <th class="sticky" *ngFor="let day of days; trackBy: identify">
+      {{ day }}
+    </th>
+    <tr *ngFor="let hour of hours; let h = index; trackBy: identify">
+      <ng-container *ngFor="let day of days; let d = index; trackBy: identify">
+        <td
+          [id]="d + '-' + h"
+          [ngClass]="{ pointer: d }"
+          (click)="openAppointmentCreation(d, h)"
+        >
+          <div *ngIf="!d">{{ hour }}</div>
+        </td>
+      </ng-container>
+    </tr>
+  </table>
+</div>

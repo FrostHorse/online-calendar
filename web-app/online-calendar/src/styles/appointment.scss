@@ -1,0 +1,19 @@
+@import "colors";
+
+.appointment-container {
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+.appointment {
+  border-radius: 6px;
+  position: absolute;
+  top: -1.5rem;
+  background-color: $color-primary;
+  color: $text-color;
+
+  .title {
+    padding: 8px;
+  }
+}

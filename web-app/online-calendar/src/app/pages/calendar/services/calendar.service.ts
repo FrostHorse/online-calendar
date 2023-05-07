@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { Observable, map, switchMap } from 'rxjs';
+import { Observable, map, switchMap, take } from 'rxjs';
 import { baseUrl } from 'src/app/constants/baseUrl';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { Calendar } from 'src/app/models/calendar/calendar';
@@ -56,6 +56,24 @@ export class CalendarService {
 
   public loadCalendars(): Observable<Calendar[]> {
     const url = `${baseUrl}/calendars`;
-    return this.http.get<Calendar[]>(url);
+    return this.http
+      .get<Calendar[]>(url)
+      .pipe(
+        map((calendars) =>
+          calendars.map((calendar) =>
+            ConverterUtil.castObjectToCalendar(calendar)
+          )
+        )
+      );
+  }
+
+  public linkAppointmentToCalendar(eventId: string): Observable<any> {
+    const url = `${baseUrl}/calendars/addEvent`;
+    return this.selectedCalendar$.pipe(
+      take(1),
+      switchMap(({ _id }) =>
+        this.http.post<any>(url, { calendarId: _id, eventId })
+      )
+    );
   }
 }

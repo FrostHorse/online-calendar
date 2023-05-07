@@ -1,6 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Appointment } from 'src/app/models/appointment/appointment';
+import { Place } from 'src/app/models/appointment/place';
 import { DialogData } from 'src/app/models/dialog/dialog-data';
 import { DialogRef } from 'src/app/models/dialog/dialog-ref';
 import { DIALOG_DATA } from 'src/app/models/dialog/dialog-tokens';
@@ -14,6 +15,7 @@ import { FormatDateUtil } from 'src/app/utils/format-date.util';
 export class AddAppointmentDialogComponent {
   public createAppointmentForm = new FormGroup({
     name: new FormControl(''),
+    comment: new FormControl(''),
     address: new FormControl(''),
     city: new FormControl(''),
     postalCode: new FormControl(1111, [
@@ -44,7 +46,10 @@ export class AddAppointmentDialogComponent {
     this.dialogRef.close();
   }
 
-  public createAppointment(): void {}
+  public createAppointment(): void {
+    const appointment = this.createAppointmentFromForm();
+    this.dialogRef.close(appointment);
+  }
 
   public formatToTwoDigit(
     formControlName: string,
@@ -78,9 +83,58 @@ export class AddAppointmentDialogComponent {
     });
   }
 
+  private createAppointmentFromForm(): Appointment {
+    return {
+      ...this.data.data,
+      name: this.createAppointmentForm.value.name,
+      place: this.createPlace(),
+      ownerId: this.createAppointmentForm.value.name,
+      startDate: this.createStartDate(),
+      endDate: this.createEndDate(),
+      comment: this.createAppointmentForm.value.comment,
+      allDay: this.createAppointmentForm.value.allDay,
+      recurring: false,
+    };
+  }
+
+  private createPlace(): Place {
+    return {
+      address: this.createAppointmentForm.value.address ?? '',
+      city: this.createAppointmentForm.value.city ?? '',
+      postalCode: this.createAppointmentForm.value.postalCode ?? 0,
+    };
+  }
+
+  private createStartDate(): Date {
+    const value = this.createAppointmentForm.value;
+    return new Date(
+      Number(value.startDateYYYY),
+      Number(value.startDateM) - 1,
+      Number(value.startDateD),
+      Number(value.startDateHH),
+      Number(value.startDateMM),
+      0,
+      0
+    );
+  }
+
+  private createEndDate(): Date {
+    const value = this.createAppointmentForm.value;
+    return new Date(
+      Number(value.endDateYYYY),
+      Number(value.endDateM) - 1,
+      Number(value.endDateD),
+      Number(value.endDateHH),
+      Number(value.endDateMM),
+      0,
+      0
+    );
+  }
+
   private setForm(data: Appointment): void {
     this.createAppointmentForm.patchValue({
       name: data.name,
+      comment: data.comment,
       address: data.place.address,
       city: data.place.city,
       postalCode: data.place.postalCode,

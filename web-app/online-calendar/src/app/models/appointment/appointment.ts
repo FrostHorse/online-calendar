@@ -1,7 +1,8 @@
+import { Participant } from './participant';
 import { Place } from './place';
 
 export interface Appointment {
-  id: string;
+  _id: string;
   name: string;
   place: Place;
   ownerId: string;
@@ -10,4 +11,5 @@ export interface Appointment {
   comment: string;
   allDay: boolean;
   recurring: boolean;
+  participants?: Participant[];
 }

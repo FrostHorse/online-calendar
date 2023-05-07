@@ -1,0 +1,44 @@
+@import "colors";
+
+table,
+th,
+td,
+tr {
+  border: 1px solid black;
+  border-collapse: collapse;
+  border-spacing: 0px;
+  padding: 0;
+  text-align: center;
+}
+
+td {
+  height: 3rem;
+  width: 6rem;
+}
+
+.sticky {
+  position: sticky;
+  z-index: 100;
+  top: -1px;
+}
+
+th {
+  pointer-events: none;
+  background-color: #a8a8a8;
+  padding: 1rem;
+  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
+}
+table {
+  width: 100%;
+  position: relative;
+}
+
+.calendar-container {
+  margin: 0rem 2rem;
+  max-height: 85vh;
+  overflow-x: scroll;
+}
+
+.pointer {
+  cursor: pointer;
+}
