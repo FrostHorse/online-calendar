@@ -1,18 +1,18 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
   Patch,
+  Post,
 } from '@nestjs/common';
-import { CalendarService } from './calendar.service';
 import { Calendar } from './calendar.schema';
+import { CalendarService } from './calendar.service';
 
-import { UpdateCalendarDto } from './dtos/update-calendar-request.dto';
-import { ModifyEventDto } from './dtos/modify-event-request.dto';
 import { CreateCalendarDto } from './dtos/create-calendar-request.dto';
+import { ModifyEventDto } from './dtos/modify-event-request.dto';
+import { UpdateCalendarDto } from './dtos/update-calendar-request.dto';
 
 @Controller('calendars')
 export class CalendarController {
@@ -20,7 +20,7 @@ export class CalendarController {
 
   @Post()
   async create(@Body() createCalendarDto: CreateCalendarDto) {
-    await this.calendarService.create(createCalendarDto);
+    return await this.calendarService.create(createCalendarDto);
   }
 
   @Post("addEvent")
