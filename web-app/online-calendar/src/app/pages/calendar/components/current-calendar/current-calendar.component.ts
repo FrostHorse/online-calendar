@@ -38,8 +38,10 @@ export class CurrentCalendarComponent implements AfterViewInit {
           DateUtils.getWeekNumber(startDate),
           startDate.getDay() == 0 ? 7 : startDate.getDay(),
           startDate.getHours(),
+          startDate.getMinutes(),
           endDate.getDay() == 0 ? 7 : endDate.getDay(),
-          endDate.getHours()
+          endDate.getHours(),
+          endDate.getMinutes()
         );
       });
       this.cdr.detectChanges();

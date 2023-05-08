@@ -5,7 +5,7 @@ import { Place } from 'src/app/models/appointment/place';
 import { DialogData } from 'src/app/models/dialog/dialog-data';
 import { DialogRef } from 'src/app/models/dialog/dialog-ref';
 import { DIALOG_DATA } from 'src/app/models/dialog/dialog-tokens';
-import { FormatDateUtil } from 'src/app/utils/format-date.util';
+import { FormatUtil } from 'src/app/utils/format-date.util';
 
 @Component({
   selector: 'app-add-appointment-dialog',
@@ -79,7 +79,7 @@ export class AddAppointmentDialogComponent {
       }
     }
     this.createAppointmentForm.patchValue({
-      [formControlName]: FormatDateUtil.formatToTwoDigit(Number(newValue)),
+      [formControlName]: FormatUtil.formatToTwoDigit(Number(newValue)),
     });
   }
 
@@ -139,17 +139,15 @@ export class AddAppointmentDialogComponent {
       city: data.place.city,
       postalCode: data.place.postalCode,
       startDateYYYY: String(data.startDate.getFullYear()),
-      startDateM: FormatDateUtil.formatToTwoDigit(
-        data.startDate.getMonth() + 1
-      ),
-      startDateD: FormatDateUtil.formatToTwoDigit(data.startDate.getDate()),
-      startDateHH: FormatDateUtil.formatToTwoDigit(data.startDate.getHours()),
-      startDateMM: FormatDateUtil.formatToTwoDigit(data.startDate.getMinutes()),
+      startDateM: FormatUtil.formatToTwoDigit(data.startDate.getMonth() + 1),
+      startDateD: FormatUtil.formatToTwoDigit(data.startDate.getDate()),
+      startDateHH: FormatUtil.formatToTwoDigit(data.startDate.getHours()),
+      startDateMM: FormatUtil.formatToTwoDigit(data.startDate.getMinutes()),
       endDateYYYY: String(data.endDate.getFullYear()),
-      endDateM: FormatDateUtil.formatToTwoDigit(data.endDate.getMonth() + 1),
-      endDateD: FormatDateUtil.formatToTwoDigit(data.endDate.getDate()),
-      endDateHH: FormatDateUtil.formatToTwoDigit(data.endDate.getHours()),
-      endDateMM: FormatDateUtil.formatToTwoDigit(data.endDate.getMinutes()),
+      endDateM: FormatUtil.formatToTwoDigit(data.endDate.getMonth() + 1),
+      endDateD: FormatUtil.formatToTwoDigit(data.endDate.getDate()),
+      endDateHH: FormatUtil.formatToTwoDigit(data.endDate.getHours()),
+      endDateMM: FormatUtil.formatToTwoDigit(data.endDate.getMinutes()),
     });
   }
 }

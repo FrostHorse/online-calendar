@@ -1,3 +1,4 @@
+import { FormatUtil } from './../../../utils/format-date.util';
 export class CreateHtmlUtil {
   public static createAppointment(
     titleText: string,
@@ -6,8 +7,10 @@ export class CreateHtmlUtil {
     currentWeek: number,
     startDay: number,
     startHour: number,
+    startMinute: number,
     endDay: number = startDay,
     endHour: number = startHour + 1,
+    endMinute: number,
     topRadius?: string
   ): void {
     const startColumn = document.getElementById(`${startDay}-${startHour}`);
@@ -20,7 +23,6 @@ export class CreateHtmlUtil {
       appointment.classList.add('appointment');
       const title = document.createElement('div');
       title.classList.add('title');
-      title.innerText = titleText;
       let diff = endHour - startHour;
       if (topRadius?.length) {
         appointment.style.borderTopLeftRadius = topRadius;
@@ -32,6 +34,13 @@ export class CreateHtmlUtil {
           const height = startColumn.offsetHeight * diff - diff / 3 - 1;
           appointment.style.width = `${width}px`;
           appointment.style.height = `${height}px`;
+          title.innerHTML = this.createTileText(
+            titleText,
+            startHour,
+            startMinute,
+            endHour,
+            endMinute
+          );
         }
       } else {
         if (currentWeek < selectedWeek) {
@@ -42,8 +51,10 @@ export class CreateHtmlUtil {
             currentWeek + 1,
             1,
             0,
+            0,
             endDay,
             endHour,
+            0,
             '0px'
           );
           return;
@@ -55,8 +66,10 @@ export class CreateHtmlUtil {
             selectedWeek,
             1,
             0,
+            0,
             endDay,
             endHour,
+            0,
             '0px'
           );
           return;
@@ -68,8 +81,10 @@ export class CreateHtmlUtil {
             currentWeek,
             startDay + 1,
             0,
+            0,
             endDay,
             endHour,
+            0,
             '0px'
           );
           diff = 24 - startHour;
@@ -79,11 +94,34 @@ export class CreateHtmlUtil {
           appointment.style.height = `${height}px`;
           appointment.style.borderBottomLeftRadius = '0px';
           appointment.style.borderBottomRightRadius = '0px';
+          title.innerHTML = this.createTileText(
+            titleText,
+            startHour,
+            startMinute,
+            24,
+            0
+          );
         }
       }
       appointment.appendChild(title);
       container.appendChild(appointment);
       startColumn.appendChild(container);
     }
+  }
+
+  private static createTileText(
+    titleText: string,
+    startHour: number,
+    startMinute: number,
+    endHour: number,
+    endMinute: number
+  ): string {
+    return `${titleText}<br>${FormatUtil.formatToTwoDigit(
+      startHour
+    )}:${FormatUtil.formatToTwoDigit(
+      startMinute
+    )} - ${FormatUtil.formatToTwoDigit(endHour)}:${FormatUtil.formatToTwoDigit(
+      endMinute
+    )}`;
   }
 }
