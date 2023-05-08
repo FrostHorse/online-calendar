@@ -8,6 +8,7 @@
 
 .appointment {
   border-radius: 6px;
+  border: 1px solid darken($color-primary, 20%);
   position: absolute;
   top: -1.5rem;
   background-color: $color-primary;

@@ -1,17 +1,17 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
   Patch,
+  Post,
 } from '@nestjs/common';
-import { EventService } from './event.service';
-import { Events } from './event.schema';
 import { CreateEventDto } from './dtos/create-event.request.dto';
-import { UpdateEventDto } from './dtos/update-event-request.dto';
 import { ModifyParticipationDto } from './dtos/modify-participation-request.dto';
+import { UpdateEventDto } from './dtos/update-event-request.dto';
+import { Events } from './event.schema';
+import { EventService } from './event.service';
 
 @Controller('events')
 export class EventController {
@@ -19,7 +19,7 @@ export class EventController {
 
   @Post()
   async create(@Body() createEventDto: CreateEventDto) {
-    await this.eventService.create(createEventDto);
+    return await this.eventService.create(createEventDto);
   }
 
   @Post("addParticipant")

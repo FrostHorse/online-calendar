@@ -13,6 +13,7 @@ import { AppointmentEffects } from './pages/calendar/store/effects/appointment.e
 import { CalendarEffects } from './pages/calendar/store/effects/calendar.effects';
 import { appointmentReducer } from './pages/calendar/store/reducers/appointment.reducer';
 import { calendarReducer } from './pages/calendar/store/reducers/calendar.reducer';
+import { selectedWeekReducer } from './pages/calendar/store/reducers/sekected-week.reducer';
 import { selectedCalendarReducer } from './pages/calendar/store/reducers/selected-calendar.reducer';
 
 @NgModule({
@@ -28,6 +29,7 @@ import { selectedCalendarReducer } from './pages/calendar/store/reducers/selecte
         selectedCalendar: selectedCalendarReducer,
         calendars: calendarReducer,
         appointments: appointmentReducer,
+        selectedWeekState: selectedWeekReducer,
       },
       {}
     ),

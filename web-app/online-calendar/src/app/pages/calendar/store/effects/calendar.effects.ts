@@ -77,7 +77,6 @@ export class CalendarEffects {
   fetchCalendars$ = createEffect(() =>
     this.actions$.pipe(
       ofType(initCalendarAction, createAppointmentAction),
-      tap(console.log),
       switchMap(() => this.calendarService.loadCalendars()),
       map((calendars) => loadCalendarsAction({ calendars }))
     )

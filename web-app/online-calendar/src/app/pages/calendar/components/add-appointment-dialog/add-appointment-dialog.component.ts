@@ -142,12 +142,12 @@ export class AddAppointmentDialogComponent {
       startDateM: FormatDateUtil.formatToTwoDigit(
         data.startDate.getMonth() + 1
       ),
-      startDateD: FormatDateUtil.formatToTwoDigit(data.startDate.getDay()),
+      startDateD: FormatDateUtil.formatToTwoDigit(data.startDate.getDate()),
       startDateHH: FormatDateUtil.formatToTwoDigit(data.startDate.getHours()),
       startDateMM: FormatDateUtil.formatToTwoDigit(data.startDate.getMinutes()),
       endDateYYYY: String(data.endDate.getFullYear()),
       endDateM: FormatDateUtil.formatToTwoDigit(data.endDate.getMonth() + 1),
-      endDateD: FormatDateUtil.formatToTwoDigit(data.endDate.getDay()),
+      endDateD: FormatDateUtil.formatToTwoDigit(data.endDate.getDate()),
       endDateHH: FormatDateUtil.formatToTwoDigit(data.endDate.getHours()),
       endDateMM: FormatDateUtil.formatToTwoDigit(data.endDate.getMinutes()),
     });

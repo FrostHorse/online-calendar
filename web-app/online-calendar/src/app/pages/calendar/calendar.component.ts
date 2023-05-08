@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { filter, map, switchMap, take } from 'rxjs';
 import { DialogService } from 'src/app/core/dialog/dialog.service';
 import { Calendar } from 'src/app/models/calendar/calendar';
@@ -15,6 +15,10 @@ import { EditCalendarDialogComponent } from './components/edit-calendar-dialog/e
 import { AppointmentService } from './services/appointment.service';
 import { CalendarService } from './services/calendar.service';
 import { initCalendarAction } from './store/actions/init-calendar.actions';
+import {
+  selectSelectedWeek,
+  selectSelectedYear,
+} from './store/selectors/week.selector';
 
 @Component({
   selector: 'app-calendar',
@@ -25,6 +29,8 @@ export class CalendarComponent {
   public calendars$ = this.calendarService.calendars$;
   public selectedCalendar$ = this.calendarService.selectedCalendar$;
   public appointments$ = this.appointmentService.appointments$;
+  public selectedWeek$ = this.store.pipe(select(selectSelectedWeek));
+  public selectedYear$ = this.store.pipe(select(selectSelectedYear));
 
   constructor(
     private readonly dialogService: DialogService,

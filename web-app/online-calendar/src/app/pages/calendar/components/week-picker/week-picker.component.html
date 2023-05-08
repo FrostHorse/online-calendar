@@ -1,0 +1,11 @@
+<div class="week-picker" *ngIf="selectedWeek && selectedYear">
+  <div class="switch" (click)="previousWeek()">
+    <app-icon>arrow_left</app-icon>
+  </div>
+  <div class="calendar-name">
+    {{ "Week " + selectedWeek + " in " + "Year " + selectedYear }}
+  </div>
+  <div class="switch" (click)="nextWeek()">
+    <app-icon>arrow_right</app-icon>
+  </div>
+</div>

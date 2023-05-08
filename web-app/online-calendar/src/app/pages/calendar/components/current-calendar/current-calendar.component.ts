@@ -12,6 +12,7 @@ import { Appointment } from 'src/app/models/appointment/appointment';
 import { Nullable } from 'src/app/models/nullable/nullable';
 import { AppointmentUtil } from 'src/app/utils/appointment.util';
 import { isStrictDefined } from 'src/app/utils/condition-checks.util';
+import { DateUtils } from 'src/app/utils/date.utils';
 import { DAYS } from '../../constants/days';
 import { AppointmentService } from '../../services/appointment.service';
 import { CreateHtmlUtil } from '../../utils/create-html.util';
@@ -23,18 +24,28 @@ import { AddAppointmentDialogComponent } from '../add-appointment-dialog/add-app
   styleUrls: ['./current-calendar.component.scss'],
 })
 export class CurrentCalendarComponent implements AfterViewInit {
+  @Input() selectedWeek: Nullable<number>;
+  @Input() selectedYear: Nullable<number>;
   @Input() set appointments(value: Nullable<Appointment[]>) {
-    value?.forEach(({ name, startDate, endDate }) => {
-      CreateHtmlUtil.createAppointment(
-        name,
-        startDate.getDay(),
-        startDate.getHours(),
-        endDate.getDay(),
-        endDate.getHours()
-      );
-    });
-    this.cdr.detectChanges();
+    setTimeout(() => {
+      this.removeAppointments();
+      value?.forEach(({ name, startDate, endDate }) => {
+        this.cdr.detectChanges();
+        CreateHtmlUtil.createAppointment(
+          name,
+          this.selectedWeek ?? DateUtils.getCurrentWeekNumber(),
+          DateUtils.getWeekNumber(startDate),
+          DateUtils.getWeekNumber(startDate),
+          startDate.getDay() == 0 ? 7 : startDate.getDay(),
+          startDate.getHours(),
+          endDate.getDay() == 0 ? 7 : endDate.getDay(),
+          endDate.getHours()
+        );
+      });
+      this.cdr.detectChanges();
+    }, 200);
   }
+
   @ViewChild('calendar') public calendar: ElementRef | undefined;
   public hours: string[] = this.getHours();
   public days = this.getDays();
@@ -50,9 +61,12 @@ export class CurrentCalendarComponent implements AfterViewInit {
   }
 
   public openAppointmentCreation(day: number, startHour: number): void {
-    const startDate = this.calculateDate(day, startHour);
-    const endDate = this.calculateDate(day, startHour + 1);
-    const data = AppointmentUtil.createBaseAppointment({ startDate, endDate });
+    const data = AppointmentUtil.createBaseAppointment(
+      this.selectedYear ?? new Date().getFullYear(),
+      this.selectedWeek ?? DateUtils.getCurrentWeekNumber(),
+      day,
+      startHour
+    );
     this.dialogService
       .open<AddAppointmentDialogComponent>(AddAppointmentDialogComponent, {
         title: 'Create appointment',
@@ -72,11 +86,12 @@ export class CurrentCalendarComponent implements AfterViewInit {
     return item;
   }
 
-  private calculateDate(day: number, hour: number): Date {
-    const date = new Date();
-    date.setDate(date.getDate() + (day - date.getDay()));
-    date.setHours(hour, 0, 0, 0);
-    return date;
+  private removeAppointments(): void {
+    let appointment = document.getElementById('appointment');
+    while (appointment) {
+      appointment.remove();
+      appointment = document.getElementById('appointment');
+    }
   }
 
   private getHours(): string[] {

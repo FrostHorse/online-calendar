@@ -1,11 +1,10 @@
-import { Model, Types } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { User, UserDocument } from './user.schema';
-import { CreateUserDto } from './dtos/create-user-request.dto';
+import { Model, Types } from 'mongoose';
 import { hashPassword, validatePassword } from 'src/util.functions';
+import { CreateUserDto } from './dtos/create-user-request.dto';
 import { UpdateUserDto } from './dtos/update-user-request.dto';
-import { Calendar } from 'src/calendar/calendar.schema';
+import { User, UserDocument } from './user.schema';
 
 @Injectable()
 export class UserService {
@@ -21,7 +20,6 @@ export class UserService {
 
   async loginUser(email: string, password): Promise<User> {
     const user = await this.findOne(email);
-    console.log(email)
     if (user.password && (await validatePassword(user.password, password))) {
       return user;
     }

@@ -6,8 +6,8 @@ import { tap } from 'rxjs/operators';
 import { baseUrl } from 'src/app/constants/baseUrl';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { Appointment } from 'src/app/models/appointment/appointment';
-import { ConverterUtil } from 'src/app/utils/converter.util';
 import { selectSelectedCalendarAppointments } from '../store/selectors/appointment.selector';
+import { ConverterUtil } from './../../../utils/converter.util';
 import { createAppointmentAction } from './../store/actions/appointment.actions';
 import { CalendarService } from './calendar.service';
 
@@ -58,7 +58,12 @@ export class AppointmentService {
           .linkAppointmentToCalendar(appointment._id)
           .pipe(
             tap(() =>
-              this.store.dispatch(createAppointmentAction({ appointment }))
+              this.store.dispatch(
+                createAppointmentAction({
+                  appointment:
+                    ConverterUtil.castObjectToAppointment(appointment),
+                })
+              )
             )
           )
       )

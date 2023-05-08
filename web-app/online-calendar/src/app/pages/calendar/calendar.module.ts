@@ -14,6 +14,7 @@ import { CreateCalendarDialogComponent } from './components/create-calendar-dial
 import { CreateCalendarComponent } from './components/create-calendar/create-calendar.component';
 import { CurrentCalendarComponent } from './components/current-calendar/current-calendar.component';
 import { EditCalendarDialogComponent } from './components/edit-calendar-dialog/edit-calendar-dialog.component';
+import { WeekPickerComponent } from './components/week-picker/week-picker.component';
 import { CalendarService } from './services/calendar.service';
 
 @NgModule({
@@ -35,6 +36,7 @@ import { CalendarService } from './services/calendar.service';
     EditCalendarDialogComponent,
     CurrentCalendarComponent,
     CalendarPickerComponent,
+    WeekPickerComponent,
   ],
   exports: [CalendarComponent],
   providers: [CalendarService],

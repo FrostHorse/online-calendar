@@ -1,7 +1,9 @@
 <ng-container
   *ngIf="{
     selectedCalendar: selectedCalendar$ | async,
-    calendars: calendars$ | async
+    calendars: calendars$ | async,
+    selectedWeek: selectedWeek$ | async,
+    selectedYear: selectedYear$ | async
   } as data"
 >
   <ng-container *ngIf="data.selectedCalendar; else createCalendar">
@@ -10,7 +12,13 @@
     ></app-calendar-picker>
     <app-current-calendar
       [appointments]="appointments$ | async"
+      [selectedWeek]="data.selectedWeek"
+      [selectedYear]="data.selectedYear"
     ></app-current-calendar>
+    <app-week-picker
+      [selectedWeek]="data.selectedWeek"
+      [selectedYear]="data.selectedYear"
+    ></app-week-picker>
   </ng-container>
 
   <ng-template #createCalendar>
