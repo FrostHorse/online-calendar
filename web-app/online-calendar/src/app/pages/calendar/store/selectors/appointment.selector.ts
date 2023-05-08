@@ -15,7 +15,7 @@ export const selectSelectedCalendarAppointments = createSelector(
   (appointments, selectedCalendar, selectedWeek) =>
     Object.values(appointments).filter(
       (appointment) =>
-        selectedCalendar.appointmentIds?.some((a) => a === appointment._id) &&
+        selectedCalendar?.appointmentIds?.some((a) => a === appointment._id) &&
         (DateUtils.getWeekNumber(appointment.startDate) === selectedWeek ||
           DateUtils.getWeekNumber(appointment.endDate) === selectedWeek)
     )

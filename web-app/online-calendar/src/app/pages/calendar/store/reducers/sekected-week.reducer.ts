@@ -1,4 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
+import { resetAppAction } from 'src/app/store/actions/reset-app.actions';
 import { SelectedWeekState } from 'src/app/store/selectedWeekState';
 import { DateUtils } from 'src/app/utils/date.utils';
 import {
@@ -26,5 +27,6 @@ export const selectedWeekReducer = createReducer(
       return newState;
     }
     return { ...state, selectedYear: state.selectedYear - 1, selectedWeek: 52 };
-  })
+  }),
+  on(resetAppAction, (state) => initialState)
 );

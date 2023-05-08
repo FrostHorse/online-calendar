@@ -1,12 +1,41 @@
-<ng-container *ngIf="autoLogIn$ | async">
+<ng-container *ngIf="{ autoLogIn: autoLogIn$ | async } as auto">
   <div class="sign-in-form-container">
     <form [formGroup]="signInForm" (ngSubmit)="signIn()">
-      <legend>Sign-In</legend>
-      <label>Enter your email</label><br />
-      <input type="email" name="email" formControlName="email" /><br />
-      <label>Enter your password</label><br />
-      <input type="password" name="password" formControlName="password" /><br />
-      <input type="submit" value="log-in" />
+      <div class="row">
+        <h4>Enter your email</h4>
+        <div class="input-group input-group-icon">
+          <input
+            type="text"
+            formControlName="email"
+            placeholder=""
+            minlength="1"
+          />
+          <div class="input-icon">
+            <app-icon>mail</app-icon>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <h4>Enter your password</h4>
+        <div class="input-group input-group-icon">
+          <input
+            type="password"
+            formControlName="password"
+            name="password"
+            placeholder=""
+            minlength="1"
+          />
+          <div class="input-icon">
+            <app-icon>key</app-icon>
+          </div>
+        </div>
+      </div>
+      <input
+        class="primary-button button"
+        [ngClass]="{ disabled: !signInForm.valid }"
+        type="submit"
+        value="Sign In"
+      />
     </form>
   </div>
 </ng-container>

@@ -1,5 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import { Appointment } from 'src/app/models/appointment/appointment';
+import { resetAppAction } from 'src/app/store/actions/reset-app.actions';
 import {
   createAppointmentAction,
   editAppointmentAction,
@@ -27,5 +28,6 @@ export const appointmentReducer = createReducer(
     const newState = { ...state };
     delete newState[appointmentId];
     return newState;
-  })
+  }),
+  on(resetAppAction, (state) => initialState)
 );

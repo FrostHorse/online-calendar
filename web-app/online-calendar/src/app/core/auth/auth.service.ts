@@ -1,10 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { BehaviorSubject, from, Observable, tap } from 'rxjs';
 import { baseUrl } from 'src/app/constants/baseUrl';
 import { User } from 'src/app/core/models/user';
 import { Nullable } from 'src/app/models/nullable/nullable';
+import { resetAppAction } from 'src/app/store/actions/reset-app.actions';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -14,7 +16,8 @@ export class AuthService {
   public readonly user$ = this.userSubject$.asObservable();
   constructor(
     private readonly http: HttpClient,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly store: Store
   ) {}
 
   public fetchAllUser(): Observable<any> {
@@ -47,9 +50,20 @@ export class AuthService {
 
   public autoLogIn(): Observable<any> {
     const user = JSON.parse(localStorage.getItem('user') ?? 'null');
+    console.log('autoLogIn');
     if (user) {
       return this.signIn(user.email, user.password);
     }
     return from(this.router.navigate(['sign-in']));
+  }
+
+  public logout(): void {
+    this.userSubject$.next(undefined);
+    if (localStorage.getItem('user')) {
+      localStorage.clear();
+    }
+    this.router.navigate(['sign-in']).then(() => {
+      this.store.dispatch(resetAppAction());
+    });
   }
 }

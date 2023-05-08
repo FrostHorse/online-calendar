@@ -5,6 +5,7 @@ import { tap } from 'rxjs/operators';
 import { CalendarService } from '../../services/calendar.service';
 import { createAppointmentAction } from '../actions/appointment.actions';
 import {
+  deselectCalendarAction,
   editCalendarAction,
   loadCalendarsAction,
   nextCalendarAction,
@@ -88,6 +89,19 @@ export class CalendarEffects {
         ofType(selectCalendarAction),
         tap(({ calendarId }) => {
           localStorage.setItem('selectedCalendar', calendarId);
+        })
+      ),
+    { dispatch: false }
+  );
+
+  removeSelectedCalendarFromStorage$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(deselectCalendarAction),
+        tap(() => {
+          if (localStorage.getItem('selectedCalendar')?.length) {
+            localStorage.removeItem('selectedCalendar');
+          }
         })
       ),
     { dispatch: false }

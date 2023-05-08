@@ -23,21 +23,18 @@ body {
   background-color: $text-color;
 }
 
-.mat-mdc-menu-content {
-  width: fit-content;
-  background-color: #ffffff;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  color: $color-primary;
-  app-icon:hover {
-    color: darken($color-primary, 20%);
-  }
-}
 // General button styling
 .primary-button {
   @extend %default-button;
   background-color: $color-primary;
   color: $text-color;
   border: none;
+}
+
+.disabled {
+  background-color: lighten($color-primary, 30%) !important;
+  pointer-events: none;
+  cursor: none;
 }
 
 .remove-button {

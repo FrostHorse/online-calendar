@@ -1,5 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import { Calendar } from 'src/app/models/calendar/calendar';
+import { resetAppAction } from 'src/app/store/actions/reset-app.actions';
 import {
   createCalendarAction,
   editCalendarAction,
@@ -27,5 +28,6 @@ export const calendarReducer = createReducer(
     const newState = { ...state };
     delete newState[calendarId];
     return newState;
-  })
+  }),
+  on(resetAppAction, (state) => initialState)
 );

@@ -9,7 +9,12 @@
       >
     </li>
     <li class="right">
-      <a>{{ user.name }}</a>
+      <a [matMenuTriggerFor]="userMenu">{{ user.name }}</a>
+      <mat-menu #userMenu="matMenu" class="menu">
+        <div mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon><span>sign out</span>
+        </div>
+      </mat-menu>
     </li>
   </ul>
 </ng-container>

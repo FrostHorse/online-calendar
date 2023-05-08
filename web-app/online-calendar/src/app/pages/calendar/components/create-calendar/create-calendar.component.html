@@ -10,13 +10,16 @@
           <app-icon [matMenuTriggerFor]="menu" class="calendar-menu"
             >more_vert</app-icon
           >
-          <mat-menu #menu="matMenu" class="menu">
-            <app-icon (click)="openEditCalendarDialog(calendar.value)"
-              >edit_note</app-icon
+          <mat-menu #menu="matMenu" class="customMenu">
+            <div mat-menu-item (click)="openEditCalendarDialog(calendar.value)">
+              <mat-icon>edit_note</mat-icon><span>Edit</span>
+            </div>
+            <div
+              mat-menu-item
+              (click)="openRemoveCalendarDialog(calendar.value)"
             >
-            <app-icon (click)="openRemoveCalendarDialog(calendar.value)"
-              >delete</app-icon
-            >
+              <mat-icon>delete</mat-icon><span>Remove</span>
+            </div>
           </mat-menu>
         </div>
         <div class="title">

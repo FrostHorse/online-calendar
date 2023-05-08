@@ -22,4 +22,8 @@ export class NavBarComponent {
   deselectCalendar(): void {
     this.store.dispatch(deselectCalendarAction());
   }
+
+  logout(): void {
+    this.authService.logout();
+  }
 }

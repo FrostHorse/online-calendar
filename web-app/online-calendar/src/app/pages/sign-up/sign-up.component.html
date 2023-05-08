@@ -1,14 +1,67 @@
 <div class="sign-up-form-container">
   <form [formGroup]="signUpForm" (ngSubmit)="signUp()">
-    <legend>Sign-Up</legend>
-    <label>Enter your email</label><br />
-    <input type="email" name="email" formControlName="email" /><br />
-    <label>Enter your full name</label><br />
-    <input type="text" name="name" formControlName="name" /><br />
-    <label>Enter your phone number</label><br />
-    <input type="text" name="phoneNumber" formControlName="phoneNumber" /><br />
-    <label>Enter your password</label><br />
-    <input type="password" name="password" formControlName="password" /><br />
-    <input type="submit" value="sign-up" />
+    <div class="row">
+      <h4>Enter your email</h4>
+      <div class="input-group input-group-icon">
+        <input
+          type="text"
+          formControlName="email"
+          placeholder=""
+          minlength="1"
+        />
+        <div class="input-icon">
+          <app-icon>mail</app-icon>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <h4>Enter your full name</h4>
+      <div class="input-group input-group-icon">
+        <input
+          type="text"
+          formControlName="name"
+          placeholder=""
+          minlength="1"
+        />
+        <div class="input-icon">
+          <app-icon>person</app-icon>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <h4>Enter your phone number</h4>
+      <div class="input-group input-group-icon">
+        <input
+          type="text"
+          formControlName="phoneNumber"
+          placeholder=""
+          minlength="1"
+        />
+        <div class="input-icon">
+          <app-icon>smartphone</app-icon>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <h4>Enter your password</h4>
+      <div class="input-group input-group-icon">
+        <input
+          type="password"
+          formControlName="password"
+          name="password"
+          placeholder=""
+          minlength="1"
+        />
+        <div class="input-icon">
+          <app-icon>key</app-icon>
+        </div>
+      </div>
+    </div>
+    <input
+      class="primary-button button"
+      [ngClass]="{ disabled: !signUpForm.valid }"
+      type="submit"
+      value="Sign Up"
+    />
   </form>
 </div>

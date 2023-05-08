@@ -1,4 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
+import { resetAppAction } from 'src/app/store/actions/reset-app.actions';
 import {
   deselectCalendarAction,
   selectCalendarAction,
@@ -9,5 +10,5 @@ const initialState: string = '';
 export const selectedCalendarReducer = createReducer(
   initialState,
   on(selectCalendarAction, (state, { calendarId }) => calendarId),
-  on(deselectCalendarAction, (state) => initialState)
+  on(deselectCalendarAction, resetAppAction, (state) => initialState)
 );

@@ -1,6 +1,16 @@
+@import "inputs";
+
 .sign-up-form-container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: calc(100vh - 50px);
+}
+
+.button {
+  background-color: $color-primary;
+
+  &:hover {
+    background-color: darken($color-primary, 10%);
+  }
 }
