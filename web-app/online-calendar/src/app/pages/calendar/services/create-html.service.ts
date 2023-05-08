@@ -1,6 +1,15 @@
-import { FormatUtil } from './../../../utils/format-date.util';
-export class CreateHtmlUtil {
-  public static createAppointment(
+import { Injectable } from '@angular/core';
+import { FormatUtil } from 'src/app/utils/format-date.util';
+import { AppointmentService } from './appointment.service';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CreateHtmlService {
+  constructor(private readonly appointmentService: AppointmentService) {}
+
+  public createAppointment(
+    appointmentId: string,
     titleText: string,
     selectedWeek: number,
     startWeek: number,
@@ -18,6 +27,11 @@ export class CreateHtmlUtil {
       const container = document.createElement('div');
       container.classList.add('appointment-container');
       container.id = 'appointment';
+
+      container.addEventListener('click', (event) => {
+        event.stopPropagation();
+        this.appointmentService.openEditAppointment(appointmentId);
+      });
 
       const appointment = document.createElement('div');
       appointment.classList.add('appointment');
@@ -45,6 +59,7 @@ export class CreateHtmlUtil {
       } else {
         if (currentWeek < selectedWeek) {
           this.createAppointment(
+            appointmentId,
             titleText,
             selectedWeek,
             startWeek,
@@ -60,6 +75,7 @@ export class CreateHtmlUtil {
           return;
         } else if (startWeek !== selectedWeek && currentWeek === selectedWeek) {
           this.createAppointment(
+            appointmentId,
             titleText,
             selectedWeek,
             selectedWeek,
@@ -75,6 +91,7 @@ export class CreateHtmlUtil {
           return;
         } else {
           this.createAppointment(
+            appointmentId,
             titleText,
             selectedWeek,
             startWeek,
@@ -109,7 +126,7 @@ export class CreateHtmlUtil {
     }
   }
 
-  private static createTileText(
+  private createTileText(
     titleText: string,
     startHour: number,
     startMinute: number,

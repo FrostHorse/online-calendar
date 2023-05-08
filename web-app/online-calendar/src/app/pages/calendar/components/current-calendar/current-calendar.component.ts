@@ -15,7 +15,7 @@ import { isStrictDefined } from 'src/app/utils/condition-checks.util';
 import { DateUtils } from 'src/app/utils/date.utils';
 import { DAYS } from '../../constants/days';
 import { AppointmentService } from '../../services/appointment.service';
-import { CreateHtmlUtil } from '../../utils/create-html.util';
+import { CreateHtmlService } from '../../services/create-html.service';
 import { AddAppointmentDialogComponent } from '../add-appointment-dialog/add-appointment-dialog.component';
 
 @Component({
@@ -29,9 +29,10 @@ export class CurrentCalendarComponent implements AfterViewInit {
   @Input() set appointments(value: Nullable<Appointment[]>) {
     setTimeout(() => {
       this.removeAppointments();
-      value?.forEach(({ name, startDate, endDate }) => {
+      value?.forEach(({ _id, name, startDate, endDate }) => {
         this.cdr.detectChanges();
-        CreateHtmlUtil.createAppointment(
+        this.createHtmlService.createAppointment(
+          _id,
           name,
           this.selectedWeek ?? DateUtils.getCurrentWeekNumber(),
           DateUtils.getWeekNumber(startDate),
@@ -55,6 +56,7 @@ export class CurrentCalendarComponent implements AfterViewInit {
   constructor(
     private readonly appointmentService: AppointmentService,
     private readonly dialogService: DialogService,
+    private readonly createHtmlService: CreateHtmlService,
     private cdr: ChangeDetectorRef
   ) {}
 

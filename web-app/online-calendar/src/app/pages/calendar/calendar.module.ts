@@ -13,6 +13,7 @@ import { CalendarPickerComponent } from './components/calendar-picker/calendar-p
 import { CreateCalendarDialogComponent } from './components/create-calendar-dialog/create-calendar-dialog.component';
 import { CreateCalendarComponent } from './components/create-calendar/create-calendar.component';
 import { CurrentCalendarComponent } from './components/current-calendar/current-calendar.component';
+import { EditAppointmentDialogComponent } from './components/edit-appointment-dialog/edit-appointment-dialog.component';
 import { EditCalendarDialogComponent } from './components/edit-calendar-dialog/edit-calendar-dialog.component';
 import { WeekPickerComponent } from './components/week-picker/week-picker.component';
 import { CalendarService } from './services/calendar.service';
@@ -37,6 +38,7 @@ import { CalendarService } from './services/calendar.service';
     CurrentCalendarComponent,
     CalendarPickerComponent,
     WeekPickerComponent,
+    EditAppointmentDialogComponent,
   ],
   exports: [CalendarComponent],
   providers: [CalendarService],

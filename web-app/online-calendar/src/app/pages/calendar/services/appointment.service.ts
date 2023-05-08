@@ -1,14 +1,21 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { Observable, map, switchMap } from 'rxjs';
+import { Observable, filter, map, switchMap, take } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { baseUrl } from 'src/app/constants/baseUrl';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { Appointment } from 'src/app/models/appointment/appointment';
+import { isStrictDefined } from 'src/app/utils/condition-checks.util';
+import { EditAppointmentDialogComponent } from '../components/edit-appointment-dialog/edit-appointment-dialog.component';
 import { selectSelectedCalendarAppointments } from '../store/selectors/appointment.selector';
+import { DialogService } from './../../../core/dialog/dialog.service';
 import { ConverterUtil } from './../../../utils/converter.util';
-import { createAppointmentAction } from './../store/actions/appointment.actions';
+import {
+  createAppointmentAction,
+  editAppointmentAction,
+  removeAppointmentAction,
+} from './../store/actions/appointment.actions';
 import { CalendarService } from './calendar.service';
 
 @Injectable({
@@ -22,6 +29,7 @@ export class AppointmentService {
     private readonly http: HttpClient,
     private readonly authService: AuthService,
     private readonly calendarService: CalendarService,
+    private readonly dialogService: DialogService,
     private readonly store: Store
   ) {}
 
@@ -54,19 +62,73 @@ export class AppointmentService {
         })
       ),
       switchMap((appointment) =>
-        this.calendarService
-          .linkAppointmentToCalendar(appointment._id)
-          .pipe(
-            tap(() =>
-              this.store.dispatch(
-                createAppointmentAction({
-                  appointment:
-                    ConverterUtil.castObjectToAppointment(appointment),
-                })
-              )
+        this.calendarService.linkAppointmentToCalendar(appointment._id).pipe(
+          tap(() =>
+            this.store.dispatch(
+              createAppointmentAction({
+                appointment: ConverterUtil.castObjectToAppointment(appointment),
+              })
             )
           )
+        )
       )
     );
+  }
+
+  public editAppointmentAction(appointment: Appointment): Observable<any> {
+    const url = `${baseUrl}/events/${appointment._id}`;
+    return this.http
+      .patch<any>(url, {
+        name: appointment.name,
+        ownerId: appointment.ownerId,
+        place: appointment.place,
+        startDate: appointment.startDate,
+        endDate: appointment.endDate,
+        comment: appointment.comment,
+        allDay: appointment.allDay,
+        recurring: appointment.recurring,
+      })
+      .pipe(
+        tap(() => this.store.dispatch(editAppointmentAction({ appointment })))
+      );
+  }
+
+  public removeAppointmentAction(appointmentId: string): Observable<any> {
+    const url = `${baseUrl}/events/${appointmentId}`;
+    return this.http
+      .delete<any>(url)
+      .pipe(
+        tap(() =>
+          this.store.dispatch(removeAppointmentAction({ appointmentId }))
+        )
+      );
+  }
+
+  public openEditAppointment(appointmentId: string): void {
+    this.appointments$
+      .pipe(
+        take(1),
+        switchMap((appointments) =>
+          this.dialogService
+            .open<EditAppointmentDialogComponent>(
+              EditAppointmentDialogComponent,
+              {
+                title: 'Edit appointment',
+                data: appointments.find(({ _id }) => _id === appointmentId),
+              }
+            )
+            .afterClosed()
+            .pipe(
+              filter(isStrictDefined),
+              switchMap((appointment) => {
+                if (appointment === 'remove') {
+                  return this.removeAppointmentAction(appointmentId);
+                }
+                return this.editAppointmentAction(appointment);
+              })
+            )
+        )
+      )
+      .subscribe();
   }
 }

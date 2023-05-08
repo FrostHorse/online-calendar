@@ -36,8 +36,19 @@ body {
 .primary-button {
   @extend %default-button;
   background-color: $color-primary;
-  color: #ffffff;
+  color: $text-color;
   border: none;
+}
+
+.remove-button {
+  @extend %default-button;
+  background-color: $color-red;
+  color: $text-color;
+  border: none;
+
+  &:hover {
+    background-color: darken($color-red, 10%);
+  }
 }
 
 .secondary-button {

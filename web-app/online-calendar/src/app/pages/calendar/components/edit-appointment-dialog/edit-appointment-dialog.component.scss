@@ -1,0 +1,20 @@
+@import "inputs";
+
+.footer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: 1.5rem;
+  margin-top: 0.5rem;
+
+  .button-container {
+    display: flex;
+    flex: 1;
+    gap: 0.5rem;
+
+    .remove-button {
+      margin-right: auto;
+    }
+  }
+}
