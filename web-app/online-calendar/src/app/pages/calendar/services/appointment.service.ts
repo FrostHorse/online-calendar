@@ -49,6 +49,7 @@ export class AppointmentService {
   public createAppointment(appointment: Appointment): Observable<any> {
     const url = `${baseUrl}/events`;
     return this.authService.user$.pipe(
+      take(1),
       switchMap((user) =>
         this.http.post<any>(url, {
           name: appointment.name,

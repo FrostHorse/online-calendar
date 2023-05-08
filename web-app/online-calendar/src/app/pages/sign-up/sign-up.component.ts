@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { take } from 'rxjs';
 import { User } from 'src/app/core/models/user';
 import { AuthService } from '../../core/auth/auth.service';
@@ -17,7 +18,10 @@ export class SignUpComponent {
     password: new FormControl('', [Validators.required]),
   });
 
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly router: Router
+  ) {}
 
   public signUp(): void {
     if (
@@ -35,5 +39,9 @@ export class SignUpComponent {
       };
       this.authService.signUp(user).pipe(take(1)).subscribe();
     }
+  }
+
+  public navigateToSignIn(): void {
+    this.router.navigate(['sign-in']);
   }
 }

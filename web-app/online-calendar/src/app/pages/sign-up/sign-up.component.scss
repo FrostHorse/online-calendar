@@ -3,6 +3,7 @@
 .sign-up-form-container {
   display: flex;
   justify-content: center;
+  flex-direction: column;
   align-items: center;
   height: calc(100vh - 50px);
 }
@@ -12,5 +13,16 @@
 
   &:hover {
     background-color: darken($color-primary, 10%);
+  }
+}
+
+.navigate-button {
+  margin-top: 0.5rem;
+  color: $color-primary;
+  transition: color 0.25s ease;
+  cursor: pointer;
+  &:hover {
+    color: darken($color-primary, 10%);
+    text-decoration: underline;
   }
 }

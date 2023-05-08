@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { take } from 'rxjs';
 import { AuthService } from '../../core/auth/auth.service';
 
@@ -15,7 +16,10 @@ export class SignInComponent {
   });
   public autoLogIn$ = this.authService.autoLogIn();
 
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly router: Router
+  ) {}
 
   public signIn(): void {
     if (
@@ -28,5 +32,9 @@ export class SignInComponent {
         .pipe(take(1))
         .subscribe();
     }
+  }
+
+  public navigateToSignUp(): void {
+    this.router.navigate(['sign-up']);
   }
 }

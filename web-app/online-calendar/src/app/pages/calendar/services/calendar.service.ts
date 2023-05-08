@@ -30,6 +30,7 @@ export class CalendarService {
     const url = `${baseUrl}/calendars`;
     const linkCalendarUrl = `${baseUrl}/users/addCalendar`;
     return this.authService.user$.pipe(
+      take(1),
       switchMap((user) =>
         this.http.post<any>(url, { name, ownerId: user?._id }).pipe(
           switchMap((calendar) =>
