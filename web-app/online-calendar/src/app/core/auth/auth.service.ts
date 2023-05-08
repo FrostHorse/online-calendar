@@ -50,7 +50,6 @@ export class AuthService {
 
   public autoLogIn(): Observable<any> {
     const user = JSON.parse(localStorage.getItem('user') ?? 'null');
-    console.log('autoLogIn');
     if (user) {
       return this.signIn(user.email, user.password);
     }
