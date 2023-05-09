@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { BaseDialogModule } from 'src/app/shared/dialogs/base-dialog/base-dialog.module';
 import { ConfirmDialogModule } from 'src/app/shared/dialogs/confirm-dialog/confirm-dialog.module';
@@ -28,7 +27,6 @@ import { CalendarService } from './services/calendar.service';
     IconModule,
     FormatPipeModule,
     MatMenuModule,
-    MatIconModule,
     ConfirmDialogModule,
   ],
   declarations: [

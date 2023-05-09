@@ -12,13 +12,13 @@
           >
           <mat-menu #menu="matMenu" class="customMenu">
             <div mat-menu-item (click)="openEditCalendarDialog(calendar.value)">
-              <mat-icon>edit_note</mat-icon><span>Edit</span>
+              <span class="menu-item"><app-icon>edit_note</app-icon>Edit</span>
             </div>
             <div
               mat-menu-item
               (click)="openRemoveCalendarDialog(calendar.value)"
             >
-              <mat-icon>delete</mat-icon><span>Remove</span>
+              <span class="menu-item"><app-icon>delete</app-icon>Remove</span>
             </div>
           </mat-menu>
         </div>

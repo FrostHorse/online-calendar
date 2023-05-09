@@ -12,7 +12,7 @@
       <a [matMenuTriggerFor]="userMenu">{{ user.name }}</a>
       <mat-menu #userMenu="matMenu" class="menu">
         <div mat-menu-item (click)="logout()">
-          <mat-icon>logout</mat-icon><span>sign out</span>
+          <span class="menu-item"><app-icon>logout</app-icon> sign out</span>
         </div>
       </mat-menu>
     </li>

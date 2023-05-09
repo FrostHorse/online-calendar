@@ -19,6 +19,14 @@ li a {
   cursor: pointer;
 }
 
+.menu-item {
+  display: flex;
+
+  app-icon {
+    margin-right: 0.5rem;
+  }
+}
+
 /* Change the link color to #111 (black) on hover */
 li a:hover {
   background-color: #111;
