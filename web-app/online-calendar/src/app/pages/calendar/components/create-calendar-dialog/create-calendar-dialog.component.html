@@ -1,4 +1,4 @@
-<app-base-dialog>
+<app-base-dialog [enableOverflow]="true">
   <div class="form-container">
     <form [formGroup]="createCalendarForm">
       <div class="row">
@@ -14,6 +14,14 @@
             <app-icon>calendar_add_on</app-icon>
           </div>
         </div>
+      </div>
+      <div class="row">
+        <h4>Add users</h4>
+        <app-user-selector
+          [selectedUsers]="createCalendarForm.value.users"
+          (selectedUsersEventEmitter)="selectUser($event)"
+          (removeUserEventEmitter)="removeUser($event)"
+        ></app-user-selector>
       </div>
     </form>
     <div class="footer">

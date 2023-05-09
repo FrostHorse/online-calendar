@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, from, Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, from, tap } from 'rxjs';
 import { baseUrl } from 'src/app/constants/baseUrl';
 import { User } from 'src/app/core/models/user';
 import { Nullable } from 'src/app/models/nullable/nullable';
@@ -13,7 +13,9 @@ export class AuthService {
   private readonly userSubject$ = new BehaviorSubject<Nullable<User>>(
     undefined
   );
+  private readonly usersSubject$ = new BehaviorSubject<User[]>([]);
   public readonly user$ = this.userSubject$.asObservable();
+  public readonly users$ = this.usersSubject$.asObservable();
   constructor(
     private readonly http: HttpClient,
     private readonly router: Router,
@@ -22,7 +24,9 @@ export class AuthService {
 
   public fetchAllUser(): Observable<any> {
     const url = `${baseUrl}/users`;
-    return this.http.get<any>(url);
+    return this.http
+      .get<any>(url)
+      .pipe(tap((users) => this.usersSubject$.next(users)));
   }
 
   public signUp(user: User): Observable<User> {

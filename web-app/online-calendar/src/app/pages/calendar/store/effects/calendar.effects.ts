@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
 import { map, switchMap } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { AuthService } from 'src/app/core/auth/auth.service';
 import { CalendarService } from '../../services/calendar.service';
 import { createAppointmentAction } from '../actions/appointment.actions';
 import {
@@ -78,6 +79,7 @@ export class CalendarEffects {
   fetchCalendars$ = createEffect(() =>
     this.actions$.pipe(
       ofType(initCalendarAction, createAppointmentAction),
+      switchMap(() => this.authService.fetchAllUser()),
       switchMap(() => this.calendarService.loadCalendars()),
       map((calendars) => loadCalendarsAction({ calendars }))
     )
@@ -122,6 +124,7 @@ export class CalendarEffects {
 
   constructor(
     private readonly actions$: Actions,
-    private readonly calendarService: CalendarService
+    private readonly calendarService: CalendarService,
+    private readonly authService: AuthService
   ) {}
 }

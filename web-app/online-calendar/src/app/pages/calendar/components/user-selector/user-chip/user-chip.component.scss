@@ -1,0 +1,25 @@
+@import "colors";
+
+.user-chip {
+  display: flex;
+  background-color: lighten($color-primary, 10%);
+  align-items: center;
+  width: fit-content;
+  border-radius: 6px;
+  line-height: 1rem;
+  cursor: pointer;
+
+  .icon-container {
+    border-radius: 6px 0 0 6px;
+    background-color: $color-primary;
+  }
+
+  .close-icon,
+  .icon-container {
+    font-size: 18px;
+  }
+
+  .name {
+    padding-left: 4px;
+  }
+}

@@ -1,0 +1,9 @@
+<div class="user-chip" *ngIf="user">
+  <div class="icon-container">
+    <app-icon [isAutoFontSize]="true">person</app-icon>
+  </div>
+  <div class="name">{{ user.name }}</div>
+  <div class="close-icon" (click)="removeUser()">
+    <app-icon [isAutoFontSize]="true">close</app-icon>
+  </div>
+</div>

@@ -5,7 +5,10 @@
       <app-icon (click)="close()">close</app-icon>
     </div>
   </div>
-  <div class="dialog-content">
+  <div
+    class="dialog-content"
+    [style.overflow]="enableOverflow ? 'visible' : 'auto'"
+  >
     <ng-content></ng-content>
   </div>
 </div>

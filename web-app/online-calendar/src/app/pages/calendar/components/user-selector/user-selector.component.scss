@@ -1,0 +1,37 @@
+@import "colors";
+@import "inputs";
+
+.chip-container {
+  display: flex;
+  max-width: 25vw;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin-bottom: 0.2rem;
+}
+
+.user-list-container {
+  position: relative;
+  height: 0;
+  width: 0;
+
+  .user-list {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    border: 1px solid $color-primary;
+    background-color: $text-color;
+    border-radius: 0 0 4px 4px;
+
+    .user-item {
+      flex: 1;
+      padding: 0.5rem;
+      z-index: 100;
+      cursor: pointer;
+
+      &:hover {
+        background-color: $color-primary;
+        color: white;
+      }
+    }
+  }
+}

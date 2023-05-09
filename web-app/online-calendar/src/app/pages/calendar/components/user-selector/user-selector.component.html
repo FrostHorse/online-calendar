@@ -1,0 +1,35 @@
+<div class=".user-select-container">
+  <div class=".row">
+    <div class="chip-container">
+      <app-user-chip
+        *ngFor="let user of selectedUsers"
+        [user]="user"
+        (removeUserEventEmitter)="removeUser($event)"
+      ></app-user-chip>
+    </div>
+    <input
+      #search
+      type="text"
+      placeholder="Search for users"
+      [formControl]="searchBar"
+      (focus)="onFocus()"
+      (blur)="onBlur()"
+      (input)="changeSearchText()"
+    />
+    <div
+      class="user-list-container"
+      [style.display]="(isSelected$ | async) ? 'flex' : 'none'"
+      *ngIf="selectedUsers$ | async as selectedUsers"
+    >
+      <div class="user-list" [style.width.px]="search.offsetWidth">
+        <div
+          class="user-item"
+          *ngFor="let user of selectedUsers"
+          (click)="selectUser(user)"
+        >
+          <span>{{ user.name }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

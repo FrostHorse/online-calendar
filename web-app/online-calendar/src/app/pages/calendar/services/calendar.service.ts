@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { Observable, map, switchMap, take } from 'rxjs';
+import { Observable, filter, map, switchMap, take } from 'rxjs';
 import { baseUrl } from 'src/app/constants/baseUrl';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { Calendar } from 'src/app/models/calendar/calendar';
@@ -70,6 +70,7 @@ export class CalendarService {
   public loadCalendars(): Observable<Calendar[]> {
     const url = `${baseUrl}/users/visibleCalendars`;
     return this.authService.user$.pipe(
+      filter(isStrictDefined),
       take(1),
       switchMap((user) =>
         this.http
