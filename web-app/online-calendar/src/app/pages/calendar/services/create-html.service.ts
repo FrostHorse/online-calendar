@@ -45,7 +45,11 @@ export class CreateHtmlService {
       if (startDay === endDay && selectedWeek === currentWeek) {
         if (startHour + diff <= 24) {
           const width = startColumn.offsetWidth - 2;
-          const height = startColumn.offsetHeight * diff - diff / 3 - 1;
+          const height =
+            (endMinute ? startColumn.offsetHeight * (endMinute / 60) : 0) +
+            startColumn.offsetHeight * diff -
+            diff / 3 -
+            1;
           appointment.style.width = `${width}px`;
           appointment.style.height = `${height}px`;
           title.innerHTML = this.createTileText(
@@ -69,7 +73,7 @@ export class CreateHtmlService {
             0,
             endDay,
             endHour,
-            0,
+            endMinute,
             '0px'
           );
           return;
@@ -85,7 +89,7 @@ export class CreateHtmlService {
             0,
             endDay,
             endHour,
-            0,
+            endMinute,
             '0px'
           );
           return;
@@ -101,7 +105,7 @@ export class CreateHtmlService {
             0,
             endDay,
             endHour,
-            0,
+            endMinute,
             '0px'
           );
           diff = 24 - startHour;
