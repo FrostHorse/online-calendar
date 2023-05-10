@@ -137,4 +137,51 @@ export class UserService {
   async removeRank(userId: string,rankId: string): Promise<User> {
     return await this.userModel.findByIdAndUpdate({_id: new Types.ObjectId(userId)}, {$pull: {rankIds: new Types.ObjectId(rankId)}}, {new: true})
   }
+
+  async getCalendarsForUser(userId: string) {
+    const pipeline = [
+      {$match: {_id: new Types.ObjectId(userId)}},
+      {
+        $unwind: {
+            path: "$visibleCalendars",
+            preserveNullAndEmptyArrays:true
+            }  
+      },
+      {
+      $lookup: {
+               from: "calendars",
+               localField: "visibleCalendars.calendarId",
+               foreignField: "_id",
+               as: "calendars"
+          }
+      },
+      {
+      $project: {
+          _id: 0,
+          calendars: { $arrayElemAt: [ "$calendars", 0 ] }
+          
+          }
+      },
+      {
+      $group: {
+          _id: null,
+          calendars: {$addToSet: "$calendars"}
+          }
+      },
+      {
+      $project: {
+          _id: 0,
+          calendars: 1
+          
+          }
+      },
+      ]
+
+    const result = await this.userModel.aggregate(pipeline).exec()
+
+    if (result[0]?.calendars) {
+      return result[0].calendars
+    }
+    return [];
+  }
 }

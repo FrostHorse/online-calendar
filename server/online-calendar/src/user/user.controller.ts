@@ -28,6 +28,11 @@ export class UserController {
       loginUserDto.password,
     );
   }
+  @Get('calendars/:userId')
+  async findCalendarsForUser(@Param('userId') userId: string): Promise<Calendar[]> {
+    return await this.usersService.getCalendarsForUser(userId);
+  }
+
   @Get()
   async findAll(): Promise<User[]> {
     return await this.usersService.findAll();
