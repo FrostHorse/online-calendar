@@ -31,7 +31,11 @@ export class UserSelectorComponent {
       debounceTime(200),
       map(([searchText, allUser]: [string, User[]]) =>
         Object.values(allUser)
-          .filter((user) => user.name.toLowerCase().includes(searchText))
+          .filter(
+            (user) =>
+              user.name.toLowerCase().includes(searchText) &&
+              !this.selectedUsers?.some(({ _id }) => _id === user._id)
+          )
           .slice(0, 5)
       )
     );
@@ -53,9 +57,11 @@ export class UserSelectorComponent {
 
   selectUser(user: User): void {
     this.selectedUsersEventEmitter.emit(user);
+    this.searchText$.next('');
   }
 
   removeUser(userId: string): void {
     this.removeUserEventEmitter.emit(userId);
+    this.searchText$.next('');
   }
 }

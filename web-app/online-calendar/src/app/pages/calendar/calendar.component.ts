@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { filter, map, switchMap, take } from 'rxjs';
+import { AuthService } from 'src/app/core/auth/auth.service';
 import { DialogService } from 'src/app/core/dialog/dialog.service';
 import { Calendar } from 'src/app/models/calendar/calendar';
 import {
@@ -31,12 +32,14 @@ export class CalendarComponent {
   public appointments$ = this.appointmentService.appointments$;
   public selectedWeek$ = this.store.pipe(select(selectSelectedWeek));
   public selectedYear$ = this.store.pipe(select(selectSelectedYear));
+  private allUser$ = this.authService.users$;
 
   constructor(
     private readonly dialogService: DialogService,
     private readonly store: Store,
     private readonly calendarService: CalendarService,
-    private readonly appointmentService: AppointmentService
+    private readonly appointmentService: AppointmentService,
+    private readonly authService: AuthService
   ) {
     this.store.dispatch(initCalendarAction());
   }
@@ -53,28 +56,46 @@ export class CalendarComponent {
       .afterClosed()
       .pipe(
         filter(isStrictDefined),
-        switchMap((name) => this.calendarService.crateCalendar(name)),
+        switchMap(({ name, userIds }) =>
+          this.calendarService.crateCalendar(name, userIds)
+        ),
         take(1)
       )
       .subscribe();
   }
 
   public openEditCalendarDialog(calendar: Calendar): void {
-    this.dialogService
-      .open<EditCalendarDialogComponent>(EditCalendarDialogComponent, {
-        title: 'Edit Calendar',
-        data: calendar.name,
-      })
-      .afterClosed()
+    this.allUser$
       .pipe(
-        filter(isStrictDefined),
-        map((name) =>
-          this.store.dispatch(
-            editCalendarAction({ calendar: { ...calendar, name } })
-          )
-        ),
-        take(1)
+        take(1),
+        switchMap((users) =>
+          this.dialogService
+            .open<EditCalendarDialogComponent>(EditCalendarDialogComponent, {
+              title: 'Edit Calendar',
+              data: {
+                name: calendar.name,
+                users: users.filter(({ _id }) =>
+                  calendar.userIds.some(
+                    (id) => id === _id && calendar.ownerId !== _id
+                  )
+                ),
+              },
+            })
+            .afterClosed()
+            .pipe(
+              filter(isStrictDefined),
+              map(({ name, userIds }) =>
+                this.store.dispatch(
+                  editCalendarAction({
+                    calendar: { ...calendar, name, userIds },
+                  })
+                )
+              ),
+              take(1)
+            )
+        )
       )
+
       .subscribe();
   }
 

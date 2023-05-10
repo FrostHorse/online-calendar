@@ -3,4 +3,5 @@ export interface Calendar {
   name: string;
   ownerId: string;
   appointmentIds: string[];
+  userIds: string[];
 }

@@ -19,16 +19,19 @@ export class EditCalendarDialogComponent {
     private dialogRef: DialogRef,
     @Inject(DIALOG_DATA) public data: DialogData
   ) {
-    this.setForm(data.data);
+    this.setForm(data.data.name, data.data.users);
   }
 
-  public setForm(name: string): void {
-    this.editCalendarForm.patchValue({ name });
+  public setForm(name: string, users: User[]): void {
+    this.editCalendarForm.patchValue({ name, users });
   }
 
   public editCalendar() {
     if (this.editCalendarForm.valid) {
-      this.dialogRef.close(this.editCalendarForm.value.name);
+      this.dialogRef.close({
+        name: this.editCalendarForm.value.name,
+        userIds: this.editCalendarForm.value.users?.map(({ _id }) => _id) ?? [],
+      });
     }
   }
 

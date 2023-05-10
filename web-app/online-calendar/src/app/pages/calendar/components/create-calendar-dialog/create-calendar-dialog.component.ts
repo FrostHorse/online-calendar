@@ -38,7 +38,10 @@ export class CreateCalendarDialogComponent {
 
   public createCalendar() {
     if (this.createCalendarForm.valid) {
-      this.dialogRef.close(this.createCalendarForm.value.name);
+      this.dialogRef.close({
+        name: this.createCalendarForm.value.name,
+        userIds: this.createCalendarForm.value.users?.map(({ _id }) => _id),
+      });
     }
   }
 
