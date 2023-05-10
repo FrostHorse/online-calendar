@@ -54,4 +54,5 @@ export class CalendarService {
   async removeEvent(calendarId: string,eventId: string): Promise<Calendar> {
     return await this.calendarModel.findByIdAndUpdate({_id: new Types.ObjectId(calendarId)}, {$pull: {eventIds: new Types.ObjectId(eventId)}}, {new: true})
   }
+
 }

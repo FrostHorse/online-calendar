@@ -33,6 +33,11 @@ export class UserController {
     return await this.usersService.getCalendarsForUser(userId);
   }
 
+  @Get('get/:calendarId')
+  async findUsersForCalendar(@Param('calendarId') calendarId: string) {
+    return await this.usersService.getUsersForCalendars(calendarId);
+  }
+
   @Get()
   async findAll(): Promise<User[]> {
     return await this.usersService.findAll();

@@ -33,14 +33,13 @@ export class CalendarController {
     return await this.calendarService.removeEvent(modifyEventDto.calendarId,modifyEventDto.eventId);
   }
 
-  @Get()
-  async findAll(): Promise<Calendar[]> {
-    return await this.calendarService.findAll();
-  }
-
   @Get('user/:userId')
   async getCalendarsForUser(@Param('userId') id: string): Promise<Calendar[]> {
     return await this.calendarService.getCalendarsForUser(id);
+  }
+  @Get()
+  async findAll(): Promise<Calendar[]> {
+    return await this.calendarService.findAll();
   }
 
   @Get(':id')

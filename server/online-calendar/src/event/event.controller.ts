@@ -37,6 +37,16 @@ export class EventController {
     return await this.eventService.findAll();
   }
 
+  @Get('users/:id')
+  async findUsersForEvents(@Param('id') id: string): Promise<Events[]> {
+    const event = await this.eventService.findOne(id)
+    const participants = event.participants.reduce((a, c) => {
+      a.push(c.participantId.toHexString())
+      return a;
+    },[])
+    return participants;
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<Events> {
     return await this.eventService.findOne(id);

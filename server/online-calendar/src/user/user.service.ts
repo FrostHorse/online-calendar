@@ -184,4 +184,14 @@ export class UserService {
     }
     return [];
   }
+
+  async getUsersForCalendars(calendarId: string) {
+    const result = (await this.userModel.find({"visibleCalendars.calendarId": new Types.ObjectId(calendarId)}, {_id: 1}).lean()) as {_id: string}[]
+
+    return result.reduce((a:string[], c:{_id: string}) => {
+
+      a.push(c._id.toString())
+      return a;
+    }, [])
+  }
 }
