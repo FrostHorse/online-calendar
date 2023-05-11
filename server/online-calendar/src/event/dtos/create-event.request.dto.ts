@@ -57,6 +57,9 @@ export class CreateEventDto {
   recurring: boolean;
 
   @IsDefined()
-  @IsArray()
-  participants: Participant[];
+  participants: {
+    participantId: string;
+
+    canModify: boolean;
+  }[];
 }
