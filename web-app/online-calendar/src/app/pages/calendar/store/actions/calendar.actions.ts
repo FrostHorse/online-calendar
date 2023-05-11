@@ -26,9 +26,18 @@ export const createCalendarAction = createAction(
 );
 export const editCalendarAction = createAction(
   '[Calendar] Edit Calendar',
-  props<{ calendar: Calendar; removedUserIds: string[] }>()
+  props<{
+    calendar: Calendar;
+    removedUserIds: string[];
+    removeCalendarForCurrentUser?: boolean;
+  }>()
 );
 export const removeCalendarAction = createAction(
   '[Calendar] Remove Calendar',
+  props<{ calendarId: string }>()
+);
+
+export const removeCalendarForUserAction = createAction(
+  '[Calendar] Remove Calendar For User',
   props<{ calendarId: string }>()
 );

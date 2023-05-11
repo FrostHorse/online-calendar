@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
-import { map, switchMap } from 'rxjs';
+import { filter, map, switchMap } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { AuthService } from 'src/app/core/auth/auth.service';
+import { isStrictDefined } from 'src/app/utils/condition-checks.util';
 import { CalendarService } from '../../services/calendar.service';
 import { createAppointmentAction } from '../actions/appointment.actions';
 import {
@@ -12,6 +13,7 @@ import {
   nextCalendarAction,
   previousCalendarAction,
   removeCalendarAction,
+  removeCalendarForUserAction,
   selectCalendarAction,
 } from '../actions/calendar.actions';
 import { initCalendarAction } from '../actions/init-calendar.actions';
@@ -62,6 +64,32 @@ export class CalendarEffects {
         ofType(editCalendarAction),
         switchMap(({ calendar, removedUserIds }) =>
           this.calendarService.editCalendar(calendar, removedUserIds)
+        )
+      ),
+    { dispatch: false }
+  );
+
+  removeOnEdit$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(editCalendarAction),
+      filter(
+        ({ removeCalendarForCurrentUser }) => !!removeCalendarForCurrentUser
+      ),
+      map(({ calendar }) =>
+        removeCalendarForUserAction({ calendarId: calendar._id })
+      )
+    )
+  );
+
+  removeCalendarsForUser$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(removeCalendarForUserAction),
+        concatLatestFrom(() =>
+          this.authService.user$.pipe(filter(isStrictDefined))
+        ),
+        switchMap(([{ calendarId }, { _id }]) =>
+          this.calendarService.unlinkUserToCalendar(calendarId, _id)
         )
       ),
     { dispatch: false }

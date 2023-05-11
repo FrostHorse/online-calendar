@@ -53,6 +53,15 @@ export class CalendarService {
     );
   }
 
+  public unlinkUserToCalendar(
+    calendarId: string,
+    userId: string,
+    canModify = true
+  ): Observable<any> {
+    const url = `${baseUrl}/users/removeCalendar`;
+    return this.http.post<any>(url, { userId, calendarId, canModify });
+  }
+
   private linkUserToCalendar(
     calendarId: string,
     userId: string,
@@ -62,45 +71,41 @@ export class CalendarService {
     return this.http.post<any>(url, { userId, calendarId, canModify });
   }
 
-  private unlinkUserToCalendar(
-    calendarId: string,
-    userId: string,
-    canModify = true
-  ): Observable<any> {
-    const url = `${baseUrl}/users/removeCalendar`;
-    return this.http.post<any>(url, { userId, calendarId, canModify });
-  }
-
   public editCalendar(
     calendar: Calendar,
     removedUserIds: string[]
   ): Observable<any> {
     const url = `${baseUrl}/calendars/${calendar._id}`;
-    return this.http
-      .patch<any>(url, {
-        name: calendar.name,
-        ownerId: calendar.ownerId,
-      })
-      .pipe(
-        switchMap(() => {
-          if (!calendar.userIds.length) {
-            return of({});
-          }
-          return forkJoin(
-            calendar.userIds.map((userId) =>
-              this.linkUserToCalendar(calendar._id, userId)
-            )
-          );
-        }),
-        filter(() => !!removedUserIds.length),
-        switchMap(() =>
-          forkJoin(
-            removedUserIds.map((userId) =>
-              this.unlinkUserToCalendar(calendar._id, userId)
+    return this.authService.user$.pipe(
+      filter(isStrictDefined),
+      switchMap(({ _id }) =>
+        this.http
+          .patch<any>(url, {
+            name: calendar.name,
+            ownerId: calendar.ownerId,
+          })
+          .pipe(
+            switchMap(() => {
+              if (!calendar.userIds.length) {
+                return of({});
+              }
+              return forkJoin(
+                calendar.userIds.map((userId) =>
+                  this.linkUserToCalendar(calendar._id, userId)
+                )
+              );
+            }),
+            filter(() => !!removedUserIds.length),
+            switchMap(() =>
+              forkJoin(
+                removedUserIds.map((userId) =>
+                  this.unlinkUserToCalendar(calendar._id, userId)
+                )
+              )
             )
           )
-        )
-      );
+      )
+    );
   }
 
   public removeCalendar(id: string): Observable<any> {

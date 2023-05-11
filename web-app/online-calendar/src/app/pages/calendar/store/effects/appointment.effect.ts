@@ -1,8 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { map, switchMap } from 'rxjs';
+import { filter, map, switchMap } from 'rxjs';
 import { AppointmentService } from '../../services/appointment.service';
-import { loadAppointmentsAction } from '../actions/appointment.actions';
+import {
+  editAppointmentAction,
+  loadAppointmentsAction,
+  removeAppointmentAction,
+} from '../actions/appointment.actions';
 import { initCalendarAction } from '../actions/init-calendar.actions';
 
 @Injectable()
@@ -12,6 +16,19 @@ export class AppointmentEffects {
       ofType(initCalendarAction),
       switchMap(() => this.appointmentService.loadAppointments()),
       map((appointments) => loadAppointmentsAction({ appointments }))
+    )
+  );
+
+  removeOnEdit$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(editAppointmentAction),
+      filter(
+        ({ removeAppointmentForCurrentUser }) =>
+          !!removeAppointmentForCurrentUser
+      ),
+      map(({ appointment }) =>
+        removeAppointmentAction({ appointmentId: appointment._id })
+      )
     )
   );
 

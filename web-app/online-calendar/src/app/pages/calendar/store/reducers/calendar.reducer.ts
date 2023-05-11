@@ -7,6 +7,7 @@ import {
   loadCalendarsAction,
   removeCalendarAction,
 } from '../actions/calendar.actions';
+import { removeCalendarForUserAction } from './../actions/calendar.actions';
 
 const initialState: Record<string, Calendar> = {};
 
@@ -24,10 +25,14 @@ export const calendarReducer = createReducer(
   on(createCalendarAction, editCalendarAction, (state, { calendar }) =>
     Object.assign({ ...state }, { [calendar._id]: calendar })
   ),
-  on(removeCalendarAction, (state, { calendarId }) => {
-    const newState = { ...state };
-    delete newState[calendarId];
-    return newState;
-  }),
+  on(
+    removeCalendarAction,
+    removeCalendarForUserAction,
+    (state, { calendarId }) => {
+      const newState = { ...state };
+      delete newState[calendarId];
+      return newState;
+    }
+  ),
   on(resetAppAction, (state) => initialState)
 );

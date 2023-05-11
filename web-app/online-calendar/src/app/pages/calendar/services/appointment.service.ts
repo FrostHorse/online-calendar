@@ -90,21 +90,36 @@ export class AppointmentService {
 
   public editAppointmentAction(appointment: Appointment): Observable<any> {
     const url = `${baseUrl}/events/${appointment._id}`;
-    return this.http
-      .patch<any>(url, {
-        name: appointment.name,
-        ownerId: appointment.ownerId,
-        place: appointment.place,
-        startDate: appointment.startDate,
-        endDate: appointment.endDate,
-        comment: appointment.comment,
-        allDay: appointment.allDay,
-        recurring: appointment.recurring,
-        participants: appointment.participants,
-      })
-      .pipe(
-        tap(() => this.store.dispatch(editAppointmentAction({ appointment })))
-      );
+    return this.authService.user$.pipe(
+      filter(isStrictDefined),
+      switchMap(({ _id }) =>
+        this.http
+          .patch<any>(url, {
+            name: appointment.name,
+            ownerId: appointment.ownerId,
+            place: appointment.place,
+            startDate: appointment.startDate,
+            endDate: appointment.endDate,
+            comment: appointment.comment,
+            allDay: appointment.allDay,
+            recurring: appointment.recurring,
+            participants: appointment.participants,
+          })
+          .pipe(
+            tap(() =>
+              this.store.dispatch(
+                editAppointmentAction({
+                  appointment,
+                  removeAppointmentForCurrentUser: !(
+                    appointment.ownerId === _id ||
+                    appointment.participants?.some((id) => id === _id)
+                  ),
+                })
+              )
+            )
+          )
+      )
+    );
   }
 
   public removeAppointmentAction(appointmentId: string): Observable<any> {

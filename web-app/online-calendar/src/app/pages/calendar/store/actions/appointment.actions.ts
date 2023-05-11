@@ -13,7 +13,10 @@ export const createAppointmentAction = createAction(
 
 export const editAppointmentAction = createAction(
   '[Appointment] Edit appointment',
-  props<{ appointment: Appointment }>()
+  props<{
+    appointment: Appointment;
+    removeAppointmentForCurrentUser?: boolean;
+  }>()
 );
 
 export const removeAppointmentAction = createAction(

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { filter, map, switchMap, take } from 'rxjs';
+import { combineLatest, filter, map, switchMap, take } from 'rxjs';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { DialogService } from 'src/app/core/dialog/dialog.service';
 import { Calendar } from 'src/app/models/calendar/calendar';
@@ -65,10 +65,10 @@ export class CalendarComponent {
   }
 
   public openEditCalendarDialog(calendar: Calendar): void {
-    this.allUser$
+    combineLatest([this.allUser$, this.authService.user$])
       .pipe(
         take(1),
-        switchMap((users) =>
+        switchMap(([users, user]) =>
           this.dialogService
             .open<EditCalendarDialogComponent>(EditCalendarDialogComponent, {
               title: 'Edit Calendar',
@@ -89,6 +89,10 @@ export class CalendarComponent {
                   editCalendarAction({
                     calendar: { ...calendar, name, userIds },
                     removedUserIds,
+                    removeCalendarForCurrentUser: !(
+                      calendar.ownerId === user?._id ||
+                      userIds.some((id: string) => id === user?._id)
+                    ),
                   })
                 )
               ),
