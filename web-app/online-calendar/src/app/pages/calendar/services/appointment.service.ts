@@ -58,7 +58,6 @@ export class AppointmentService {
   }
 
   public createAppointment(appointment: Appointment): Observable<any> {
-    console.log(appointment);
     const url = `${baseUrl}/events`;
     return this.authService.user$.pipe(
       take(1),
@@ -91,7 +90,6 @@ export class AppointmentService {
 
   public editAppointmentAction(appointment: Appointment): Observable<any> {
     const url = `${baseUrl}/events/${appointment._id}`;
-    console.log(appointment);
     return this.http
       .patch<any>(url, {
         name: appointment.name,

@@ -13,7 +13,6 @@ export class ConverterUtil {
   }
 
   public static castObjectToAppointment(object: any): Appointment {
-    console.log(object);
     return {
       ...object,
       startDate: new Date(object.startDate),
