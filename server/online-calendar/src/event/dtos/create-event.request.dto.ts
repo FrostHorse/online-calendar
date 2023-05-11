@@ -1,11 +1,13 @@
 import {
+  IsArray,
   IsBoolean,
   IsDate,
   IsDefined,
   IsObject,
+  IsOptional,
   IsString,
 } from 'class-validator';
-import { Place } from '../event.schema';
+import { Participant, Place } from '../event.schema';
 import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -53,4 +55,8 @@ export class CreateEventDto {
   @ApiProperty()
   @IsBoolean()
   recurring: boolean;
+
+  @IsDefined()
+  @IsArray()
+  participants: Participant[];
 }

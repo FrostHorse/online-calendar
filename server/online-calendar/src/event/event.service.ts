@@ -14,6 +14,16 @@ export class EventService {
 
   async create(createEventDto: CreateEventDto): Promise<Events> {
     const createdUser = new this.eventModel(createEventDto);
+
+    if (createdUser.participants) {
+      createdUser.participants = createdUser.participants.map(participant => {
+
+        return {
+          canModify: participant.canModify,
+          participantId: new Types.ObjectId(participant.participantId)
+        }
+      })
+    }
     return await createdUser.save();
   }
 
