@@ -56,7 +56,6 @@ export class CreateEventDto {
   @IsBoolean()
   recurring: boolean;
 
-  @IsDefined()
   participants: {
     participantId: string;
 
