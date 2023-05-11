@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { Observable, filter, forkJoin, map, switchMap, take } from 'rxjs';
+import { Observable, filter, forkJoin, map, of, switchMap, take } from 'rxjs';
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { Calendar } from 'src/app/models/calendar/calendar';
 import { isStrictDefined } from 'src/app/utils/condition-checks.util';
@@ -62,7 +62,19 @@ export class CalendarService {
     return this.http.post<any>(url, { userId, calendarId, canModify });
   }
 
-  public editCalendar(calendar: Calendar): Observable<any> {
+  private unlinkUserToCalendar(
+    calendarId: string,
+    userId: string,
+    canModify = true
+  ): Observable<any> {
+    const url = `${baseUrl}/users/removeCalendar`;
+    return this.http.post<any>(url, { userId, calendarId, canModify });
+  }
+
+  public editCalendar(
+    calendar: Calendar,
+    removedUserIds: string[]
+  ): Observable<any> {
     const url = `${baseUrl}/calendars/${calendar._id}`;
     return this.http
       .patch<any>(url, {
@@ -70,10 +82,21 @@ export class CalendarService {
         ownerId: calendar.ownerId,
       })
       .pipe(
-        switchMap(() =>
-          forkJoin(
+        switchMap(() => {
+          if (!calendar.userIds.length) {
+            return of({});
+          }
+          return forkJoin(
             calendar.userIds.map((userId) =>
               this.linkUserToCalendar(calendar._id, userId)
+            )
+          );
+        }),
+        filter(() => !!removedUserIds.length),
+        switchMap(() =>
+          forkJoin(
+            removedUserIds.map((userId) =>
+              this.unlinkUserToCalendar(calendar._id, userId)
             )
           )
         )
@@ -108,7 +131,7 @@ export class CalendarService {
                     )
                   )
                 )
-            ).pipe(map((calendars) => calendars.flat()))
+            )
           )
         )
       )

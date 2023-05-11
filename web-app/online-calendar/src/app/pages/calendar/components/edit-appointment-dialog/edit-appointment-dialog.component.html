@@ -1,6 +1,6 @@
 <app-base-dialog>
   <div class="form-container">
-    <form [formGroup]="createAppointmentForm">
+    <form [formGroup]="editAppointmentForm">
       <div class="row">
         <h4>Name</h4>
         <div class="input-group input-group-icon">
@@ -9,6 +9,14 @@
             <app-icon>event</app-icon>
           </div>
         </div>
+      </div>
+      <div class="row">
+        <h4>Add users</h4>
+        <app-user-selector
+          [selectedUsers]="editAppointmentForm.value.users"
+          (selectedUsersEventEmitter)="selectUser($event)"
+          (removeUserEventEmitter)="removeUser($event)"
+        ></app-user-selector>
       </div>
       <div class="row">
         <h4>Address</h4>

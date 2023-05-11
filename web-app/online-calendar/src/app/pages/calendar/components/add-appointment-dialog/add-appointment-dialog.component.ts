@@ -1,11 +1,13 @@
 import { Component, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { User } from 'src/app/core/models/user';
 import { Appointment } from 'src/app/models/appointment/appointment';
 import { Place } from 'src/app/models/appointment/place';
 import { DialogData } from 'src/app/models/dialog/dialog-data';
 import { DialogRef } from 'src/app/models/dialog/dialog-ref';
 import { DIALOG_DATA } from 'src/app/models/dialog/dialog-tokens';
 import { FormatUtil } from 'src/app/utils/format-date.util';
+import { Participant } from './../../../../models/appointment/participant';
 
 @Component({
   selector: 'app-add-appointment-dialog',
@@ -33,6 +35,7 @@ export class AddAppointmentDialogComponent {
     endDateD: new FormControl('', [Validators.required]),
     endDateM: new FormControl('', [Validators.required]),
     endDateYYYY: new FormControl('', [Validators.required]),
+    users: new FormControl([] as User[]),
   });
 
   constructor(
@@ -49,6 +52,22 @@ export class AddAppointmentDialogComponent {
   public createAppointment(): void {
     const appointment = this.createAppointmentFromForm();
     this.dialogRef.close(appointment);
+  }
+
+  public selectUser(user: User) {
+    const users = this.createAppointmentForm.value.users;
+    if (users && !users?.find(({ _id }) => _id === user._id)) {
+      this.createAppointmentForm.patchValue({ users: [...users, user] });
+    }
+  }
+
+  public removeUser(userId: string) {
+    const users = this.createAppointmentForm.value.users;
+    if (users) {
+      this.createAppointmentForm.patchValue({
+        users: users.filter(({ _id }) => _id !== userId),
+      });
+    }
   }
 
   public formatToTwoDigit(
@@ -94,7 +113,19 @@ export class AddAppointmentDialogComponent {
       comment: this.createAppointmentForm.value.comment,
       allDay: this.createAppointmentForm.value.allDay,
       recurring: false,
+      participants: this.createParticipants(),
     };
+  }
+
+  private createParticipants(): Participant[] {
+    const participants: Participant[] = [];
+    this.createAppointmentForm.value.users?.forEach((user) => {
+      if (user._id) {
+        participants.push({ participantId: user._id, canModify: true });
+      }
+    });
+
+    return participants;
   }
 
   private createPlace(): Place {

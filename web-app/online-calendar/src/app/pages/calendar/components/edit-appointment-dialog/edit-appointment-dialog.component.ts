@@ -1,6 +1,8 @@
 import { Component, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { User } from 'src/app/core/models/user';
 import { Appointment } from 'src/app/models/appointment/appointment';
+import { Participant } from 'src/app/models/appointment/participant';
 import { Place } from 'src/app/models/appointment/place';
 import { DialogData } from 'src/app/models/dialog/dialog-data';
 import { DialogRef } from 'src/app/models/dialog/dialog-ref';
@@ -13,7 +15,7 @@ import { FormatUtil } from 'src/app/utils/format-date.util';
   styleUrls: ['./edit-appointment-dialog.component.scss'],
 })
 export class EditAppointmentDialogComponent {
-  public createAppointmentForm = new FormGroup({
+  public editAppointmentForm = new FormGroup({
     name: new FormControl(''),
     comment: new FormControl(''),
     address: new FormControl(''),
@@ -33,17 +35,34 @@ export class EditAppointmentDialogComponent {
     endDateD: new FormControl('', [Validators.required]),
     endDateM: new FormControl('', [Validators.required]),
     endDateYYYY: new FormControl('', [Validators.required]),
+    users: new FormControl([] as User[]),
   });
 
   constructor(
     private dialogRef: DialogRef,
     @Inject(DIALOG_DATA) public data: DialogData
   ) {
-    this.setForm(data.data);
+    this.setForm(data.data.appointment, data.data.users);
   }
 
   public close() {
     this.dialogRef.close();
+  }
+
+  public selectUser(user: User) {
+    const users = this.editAppointmentForm.value.users;
+    if (users && !users?.find(({ _id }) => _id === user._id)) {
+      this.editAppointmentForm.patchValue({ users: [...users, user] });
+    }
+  }
+
+  public removeUser(userId: string) {
+    const users = this.editAppointmentForm.value.users;
+    if (users) {
+      this.editAppointmentForm.patchValue({
+        users: users.filter(({ _id }) => _id !== userId),
+      });
+    }
   }
 
   public editAppointment(): void {
@@ -82,35 +101,47 @@ export class EditAppointmentDialogComponent {
         newValue = 0;
       }
     }
-    this.createAppointmentForm.patchValue({
+    this.editAppointmentForm.patchValue({
       [formControlName]: FormatUtil.formatToTwoDigit(Number(newValue)),
     });
   }
 
   private editAppointmentFromForm(): Appointment {
     return {
-      ...this.data.data,
-      name: this.createAppointmentForm.value.name,
+      ...this.data.data.appointment,
+      name: this.editAppointmentForm.value.name,
       place: this.createPlace(),
-      ownerId: this.createAppointmentForm.value.name,
+      ownerId: this.editAppointmentForm.value.name,
       startDate: this.createStartDate(),
       endDate: this.createEndDate(),
-      comment: this.createAppointmentForm.value.comment,
-      allDay: this.createAppointmentForm.value.allDay,
+      comment: this.editAppointmentForm.value.comment,
+      allDay: this.editAppointmentForm.value.allDay,
       recurring: false,
+      participants: this.createParticipants(),
     };
+  }
+
+  private createParticipants(): Participant[] {
+    const participants: Participant[] = [];
+    this.editAppointmentForm.value.users?.forEach((user) => {
+      if (user._id) {
+        participants.push({ participantId: user._id, canModify: true });
+      }
+    });
+
+    return participants;
   }
 
   private createPlace(): Place {
     return {
-      address: this.createAppointmentForm.value.address ?? '',
-      city: this.createAppointmentForm.value.city ?? '',
-      postalCode: this.createAppointmentForm.value.postalCode ?? 0,
+      address: this.editAppointmentForm.value.address ?? '',
+      city: this.editAppointmentForm.value.city ?? '',
+      postalCode: this.editAppointmentForm.value.postalCode ?? 0,
     };
   }
 
   private createStartDate(): Date {
-    const value = this.createAppointmentForm.value;
+    const value = this.editAppointmentForm.value;
     return new Date(
       Number(value.startDateYYYY),
       Number(value.startDateM) - 1,
@@ -123,7 +154,7 @@ export class EditAppointmentDialogComponent {
   }
 
   private createEndDate(): Date {
-    const value = this.createAppointmentForm.value;
+    const value = this.editAppointmentForm.value;
     return new Date(
       Number(value.endDateYYYY),
       Number(value.endDateM) - 1,
@@ -135,23 +166,30 @@ export class EditAppointmentDialogComponent {
     );
   }
 
-  private setForm(data: Appointment): void {
-    this.createAppointmentForm.patchValue({
-      name: data.name,
-      comment: data.comment,
-      address: data.place.address,
-      city: data.place.city,
-      postalCode: data.place.postalCode,
-      startDateYYYY: String(data.startDate.getFullYear()),
-      startDateM: FormatUtil.formatToTwoDigit(data.startDate.getMonth() + 1),
-      startDateD: FormatUtil.formatToTwoDigit(data.startDate.getDate()),
-      startDateHH: FormatUtil.formatToTwoDigit(data.startDate.getHours()),
-      startDateMM: FormatUtil.formatToTwoDigit(data.startDate.getMinutes()),
-      endDateYYYY: String(data.endDate.getFullYear()),
-      endDateM: FormatUtil.formatToTwoDigit(data.endDate.getMonth() + 1),
-      endDateD: FormatUtil.formatToTwoDigit(data.endDate.getDate()),
-      endDateHH: FormatUtil.formatToTwoDigit(data.endDate.getHours()),
-      endDateMM: FormatUtil.formatToTwoDigit(data.endDate.getMinutes()),
+  private setForm(appointment: Appointment, users: User[]): void {
+    this.editAppointmentForm.patchValue({
+      name: appointment.name,
+      comment: appointment.comment,
+      address: appointment.place.address,
+      city: appointment.place.city,
+      postalCode: appointment.place.postalCode,
+      startDateYYYY: String(appointment.startDate.getFullYear()),
+      startDateM: FormatUtil.formatToTwoDigit(
+        appointment.startDate.getMonth() + 1
+      ),
+      startDateD: FormatUtil.formatToTwoDigit(appointment.startDate.getDate()),
+      startDateHH: FormatUtil.formatToTwoDigit(
+        appointment.startDate.getHours()
+      ),
+      startDateMM: FormatUtil.formatToTwoDigit(
+        appointment.startDate.getMinutes()
+      ),
+      endDateYYYY: String(appointment.endDate.getFullYear()),
+      endDateM: FormatUtil.formatToTwoDigit(appointment.endDate.getMonth() + 1),
+      endDateD: FormatUtil.formatToTwoDigit(appointment.endDate.getDate()),
+      endDateHH: FormatUtil.formatToTwoDigit(appointment.endDate.getHours()),
+      endDateMM: FormatUtil.formatToTwoDigit(appointment.endDate.getMinutes()),
+      users,
     });
   }
 }

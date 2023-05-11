@@ -10,6 +10,7 @@ import {
 import { AuthService } from 'src/app/core/auth/auth.service';
 import { User } from 'src/app/core/models/user';
 import { Nullable } from 'src/app/models/nullable/nullable';
+import { CalendarService } from './../../services/calendar.service';
 
 @Component({
   selector: 'app-user-selector',
@@ -24,9 +25,26 @@ export class UserSelectorComponent {
   public searchText$ = new BehaviorSubject<string>('');
   public selectedUsers$: Observable<User[]>;
   public isSelected$ = new BehaviorSubject<boolean>(false);
-  private allUser$ = this.authService.users$;
+  private allUser$ = combineLatest([
+    this.authService.user$,
+    this.authService.users$,
+    this.calendarService.selectedCalendar$,
+  ]).pipe(
+    map(([user, users, selectedCalendar]) =>
+      users.filter(
+        ({ _id }) =>
+          (selectedCalendar?.ownerId === _id ||
+            selectedCalendar?.userIds.some((id) => id === _id) ||
+            !selectedCalendar) &&
+          _id !== user?._id
+      )
+    )
+  );
 
-  constructor(private readonly authService: AuthService) {
+  constructor(
+    private readonly authService: AuthService,
+    private readonly calendarService: CalendarService
+  ) {
     this.selectedUsers$ = combineLatest([this.searchText$, this.allUser$]).pipe(
       debounceTime(200),
       map(([searchText, allUser]: [string, User[]]) =>

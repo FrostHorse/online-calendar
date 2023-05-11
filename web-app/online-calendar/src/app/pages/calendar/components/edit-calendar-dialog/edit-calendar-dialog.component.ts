@@ -11,6 +11,7 @@ import { DIALOG_DATA } from 'src/app/models/dialog/dialog-tokens';
   styleUrls: ['./edit-calendar-dialog.component.scss'],
 })
 export class EditCalendarDialogComponent {
+  private removedUserIds: string[] = [];
   public editCalendarForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(1)]),
     users: new FormControl([] as User[]),
@@ -31,6 +32,7 @@ export class EditCalendarDialogComponent {
       this.dialogRef.close({
         name: this.editCalendarForm.value.name,
         userIds: this.editCalendarForm.value.users?.map(({ _id }) => _id) ?? [],
+        removedUserIds: this.removedUserIds,
       });
     }
   }
@@ -40,6 +42,9 @@ export class EditCalendarDialogComponent {
     if (users && !users?.find(({ _id }) => _id === user._id)) {
       this.editCalendarForm.patchValue({ users: [...users, user] });
     }
+    if (users && this.removedUserIds?.some((id) => id === user._id)) {
+      this.removedUserIds = this.removedUserIds.filter((id) => id !== user._id);
+    }
   }
 
   public removeUser(userId: string) {
@@ -48,6 +53,9 @@ export class EditCalendarDialogComponent {
       this.editCalendarForm.patchValue({
         users: users.filter(({ _id }) => _id !== userId),
       });
+      if (!this.removedUserIds.some((id) => id === userId)) {
+        this.removedUserIds.push(userId);
+      }
     }
   }
 

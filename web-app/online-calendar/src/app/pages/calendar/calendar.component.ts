@@ -84,10 +84,11 @@ export class CalendarComponent {
             .afterClosed()
             .pipe(
               filter(isStrictDefined),
-              map(({ name, userIds }) =>
+              map(({ name, userIds, removedUserIds }) =>
                 this.store.dispatch(
                   editCalendarAction({
                     calendar: { ...calendar, name, userIds },
+                    removedUserIds,
                   })
                 )
               ),

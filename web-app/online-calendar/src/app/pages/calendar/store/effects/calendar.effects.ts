@@ -60,7 +60,9 @@ export class CalendarEffects {
     () =>
       this.actions$.pipe(
         ofType(editCalendarAction),
-        switchMap(({ calendar }) => this.calendarService.editCalendar(calendar))
+        switchMap(({ calendar, removedUserIds }) =>
+          this.calendarService.editCalendar(calendar, removedUserIds)
+        )
       ),
     { dispatch: false }
   );

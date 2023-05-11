@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { Observable, filter, map, switchMap, take } from 'rxjs';
+import { Observable, combineLatest, filter, map, switchMap, take } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { baseUrl } from 'src/app/constants/baseUrl';
 import { AuthService } from 'src/app/core/auth/auth.service';
@@ -35,18 +35,30 @@ export class AppointmentService {
 
   public loadAppointments(): Observable<Appointment[]> {
     const url = `${baseUrl}/events`;
-    return this.http
-      .get<Appointment[]>(url)
-      .pipe(
-        map((appointments) =>
-          appointments.map((appointment) =>
-            ConverterUtil.castObjectToAppointment(appointment)
+    return this.authService.user$.pipe(
+      switchMap((user) =>
+        this.http
+          .get<Appointment[]>(url)
+          .pipe(
+            map((appointments: Appointment[]) =>
+              appointments
+                .filter(
+                  (appointment) =>
+                    appointment.participants?.some(
+                      ({ participantId }) => participantId === user?._id
+                    ) || appointment.ownerId === user?._id
+                )
+                .map((appointment) =>
+                  ConverterUtil.castObjectToAppointment(appointment)
+                )
+            )
           )
-        )
-      );
+      )
+    );
   }
 
   public createAppointment(appointment: Appointment): Observable<any> {
+    console.log(appointment);
     const url = `${baseUrl}/events`;
     return this.authService.user$.pipe(
       take(1),
@@ -60,6 +72,7 @@ export class AppointmentService {
           comment: appointment.comment,
           allDay: appointment.allDay,
           recurring: appointment.recurring,
+          participant: appointment.participants,
         })
       ),
       switchMap((appointment) =>
@@ -88,6 +101,7 @@ export class AppointmentService {
         comment: appointment.comment,
         allDay: appointment.allDay,
         recurring: appointment.recurring,
+        participant: appointment.participants,
       })
       .pipe(
         tap(() => this.store.dispatch(editAppointmentAction({ appointment })))
@@ -106,16 +120,26 @@ export class AppointmentService {
   }
 
   public openEditAppointment(appointmentId: string): void {
-    this.appointments$
+    combineLatest([this.appointments$, this.authService.users$])
       .pipe(
         take(1),
-        switchMap((appointments) =>
-          this.dialogService
+        switchMap(([appointments, users]) => {
+          const appointment = appointments.find(
+            ({ _id }) => _id === appointmentId
+          );
+          return this.dialogService
             .open<EditAppointmentDialogComponent>(
               EditAppointmentDialogComponent,
               {
                 title: 'Edit appointment',
-                data: appointments.find(({ _id }) => _id === appointmentId),
+                data: {
+                  appointment,
+                  users: users.filter(({ _id }) =>
+                    appointment?.participants?.some(
+                      ({ participantId }) => participantId === _id
+                    )
+                  ),
+                },
               }
             )
             .afterClosed()
@@ -127,8 +151,8 @@ export class AppointmentService {
                 }
                 return this.editAppointmentAction(appointment);
               })
-            )
-        )
+            );
+        })
       )
       .subscribe();
   }

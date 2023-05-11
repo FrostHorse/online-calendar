@@ -11,6 +11,14 @@
         </div>
       </div>
       <div class="row">
+        <h4>Add users</h4>
+        <app-user-selector
+          [selectedUsers]="createAppointmentForm.value.users"
+          (selectedUsersEventEmitter)="selectUser($event)"
+          (removeUserEventEmitter)="removeUser($event)"
+        ></app-user-selector>
+      </div>
+      <div class="row">
         <h4>Address</h4>
         <div class="input-group input-group-icon">
           <input type="text" formControlName="address" placeholder="" />
