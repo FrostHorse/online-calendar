@@ -72,7 +72,7 @@ export class AppointmentService {
           comment: appointment.comment,
           allDay: appointment.allDay,
           recurring: appointment.recurring,
-          participant: appointment.participants,
+          participants: appointment.participants ?? [],
         })
       ),
       switchMap((appointment) =>
@@ -91,6 +91,7 @@ export class AppointmentService {
 
   public editAppointmentAction(appointment: Appointment): Observable<any> {
     const url = `${baseUrl}/events/${appointment._id}`;
+    console.log(appointment);
     return this.http
       .patch<any>(url, {
         name: appointment.name,
@@ -101,7 +102,7 @@ export class AppointmentService {
         comment: appointment.comment,
         allDay: appointment.allDay,
         recurring: appointment.recurring,
-        participant: appointment.participants,
+        participants: appointment.participants,
       })
       .pipe(
         tap(() => this.store.dispatch(editAppointmentAction({ appointment })))

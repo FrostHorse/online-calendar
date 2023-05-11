@@ -107,7 +107,6 @@ export class AddAppointmentDialogComponent {
       ...this.data.data,
       name: this.createAppointmentForm.value.name,
       place: this.createPlace(),
-      ownerId: this.createAppointmentForm.value.name,
       startDate: this.createStartDate(),
       endDate: this.createEndDate(),
       comment: this.createAppointmentForm.value.comment,

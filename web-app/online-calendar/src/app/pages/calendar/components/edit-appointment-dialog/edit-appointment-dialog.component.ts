@@ -111,7 +111,6 @@ export class EditAppointmentDialogComponent {
       ...this.data.data.appointment,
       name: this.editAppointmentForm.value.name,
       place: this.createPlace(),
-      ownerId: this.editAppointmentForm.value.name,
       startDate: this.createStartDate(),
       endDate: this.createEndDate(),
       comment: this.editAppointmentForm.value.comment,
